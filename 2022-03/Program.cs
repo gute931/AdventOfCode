@@ -1,5 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+Console.WriteLine("Uppgift 2022-12-03!");
 
 
 string[] _rows = File.ReadAllLines("./data.txt");
