@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using System.Text;
 
-Console.WriteLine("Hello, World!");
+Console.WriteLine("Uppgift 2022-12-05!");
 
 
 string[] _rows = File.ReadAllLines("./data.txt");
@@ -23,8 +23,6 @@ foreach (var x in _rows.Select((value, index) => new { value, index }))
         break;
     }
 }
-
-
 
 Stack<string>[] stackPositionS1 = new Stack<string>[9];
 Stack<string>[] stackPositionS2 = new Stack<string>[9];
@@ -90,6 +88,3 @@ Console.WriteLine($"Svar : {_svar_2.ToString()}");
 // S1 -> SPFMVDTZT
 // S2 -> ZFSJBPRFP
 Console.ReadLine();
-
-
-
