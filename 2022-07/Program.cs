@@ -38,8 +38,7 @@ foreach (var _rad in _filedata)
             break;
         case "dir":
             // Skapa directory
-            GtDir _dir = _dirPos.Peek();
-            _dirPos.Push(_dir.CreateDirectory(_tranactionParts[1]));
+            _dirPos.Peek().CreateDirectory(_tranactionParts[1]);
             break;
         default:
             _dirPos.Peek().AddFile(_tranactionParts[1], int.Parse(_tranactionParts[0]));

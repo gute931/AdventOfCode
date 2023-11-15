@@ -15,18 +15,27 @@ namespace _2022_07
         {
             DirectoryName = directoryName;
         }
-
-        public GtDir CreateDirectory(string _dir)
+        GtDir currentDir;
+        public void CreateDirectory(string _dir)
         {
-            GtDir gtDir = new GtDir(_dir);
-            Directories.Add(_dir, gtDir);
-            return gtDir;
+            currentDir = new GtDir(_dir);
+            Directories.Add(_dir, currentDir);
+
         }
 
 
         public void AddFile(string _file, int _size)
         {
-            Files.Add(_file, _size);
+            if (currentDir == null)
+            {
+                if (Files.ContainsKey(_file)) Files[_file] = _size;
+                else Files.Add(_file, _size);
+            }
+            else
+            {
+                if (currentDir.Files.ContainsKey(_file)) Files[_file] = _size;
+                else currentDir.Files.Add(_file, _size);
+            }
         }
 
         int TotalFilesize()
