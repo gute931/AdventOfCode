@@ -13,7 +13,7 @@ int _myPoints2 = 0;
 
 int _pRock = 1;
 int _pPaper = 2;
-int _Scissors = 3;
+int _pScissors = 3;
 
 int _pLost = 0;
 int _pDraw = 3;
@@ -30,7 +30,7 @@ foreach (string _row in _rows)
     {
         // Lost
         case "A X": // Rock - Rock 
-            _myPoints2 += _pLost + _Scissors;
+            _myPoints2 += _pLost + _pScissors;
             break;
         case "B X": // Paper  - Rock
             _myPoints2 += _pLost + _pRock;
@@ -46,14 +46,14 @@ foreach (string _row in _rows)
             _myPoints2 += _pDraw + _pPaper;
             break;
         case "C Y": // Scissors  - Paper
-            _myPoints2 += _pDraw + _Scissors;
+            _myPoints2 += _pDraw + _pScissors;
             break;
         // Win
         case "A Z": // Rock - Scissors
             _myPoints2 += _pWon + _pPaper;
             break;
         case "B Z": // Paper - Scissors
-            _myPoints2 += _pWon + _Scissors;
+            _myPoints2 += _pWon + _pScissors;
             break;
         case "C Z": // Scissors - Scissors
             _myPoints2 += _pWon + _pRock;
@@ -72,11 +72,11 @@ foreach (string _row in _rows)
             _myPoints1 += _pDraw + _pPaper;
             break;
         case "C Z": // Scissors - Scissors
-            _myPoints1 += _pDraw + _Scissors;
+            _myPoints1 += _pDraw + _pScissors;
             break;
         // Lost
         case "A Z": // Rock - Scissors
-            _myPoints1 += _pLost + _Scissors;
+            _myPoints1 += _pLost + _pScissors;
             break;
         case "B X": // Paper  - Rock
             _myPoints1 += _pLost + _pRock;
@@ -89,7 +89,7 @@ foreach (string _row in _rows)
             _myPoints1 += _pWon + _pPaper;
             break;
         case "B Z": // Paper - Scissors
-            _myPoints1 += _pWon + _Scissors;
+            _myPoints1 += _pWon + _pScissors;
             break;
         case "C X": // Scissors - Rock
             _myPoints1 += _pWon + _pRock;
