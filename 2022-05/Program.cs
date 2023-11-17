@@ -3,7 +3,6 @@ using System.Text;
 
 Console.WriteLine("Uppgift 2022-12-05!");
 
-
 string[] _rows = File.ReadAllLines("./data.txt");
 // find end of config
 // start of transactions
@@ -71,7 +70,6 @@ for (int _r = _transationStartRow; _r < _rows.Length; _r++)
     // Svar 2.
     for (int m = 0; m < _amount; m++) _tempS2.Push(stackPositionS2[_from].Pop());
     for (int m = 0; m < _amount; m++) stackPositionS2[_to].Push(_tempS2.Pop());
-
 }
 
 StringBuilder _svar_1 = new StringBuilder();

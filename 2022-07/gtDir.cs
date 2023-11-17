@@ -11,6 +11,7 @@ namespace _2022_07
         public SortedList<string, GtDir> Directories = new SortedList<string, GtDir>();
         public SortedList<string, int> Files = new SortedList<string, int>();
         public string DirectoryName { get; set; }
+        public int TotalFileSize { get; set; }
         public GtDir(string directoryName)
         {
             DirectoryName = directoryName;
@@ -36,15 +37,17 @@ namespace _2022_07
                 if (currentDir.Files.ContainsKey(_file)) Files[_file] = _size;
                 else currentDir.Files.Add(_file, _size);
             }
+
+            TotalFileSize = GetTotalFilesizeR();
         }
 
-        int TotalFilesize()
+        int GetTotalFilesize()
         {
             return Files.Values.Sum();
         }
 
 
-        int TotalFilesizeR()
+        int GetTotalFilesizeR()
         {
             int total = 0;
             foreach (var _dir in Directories)

@@ -1,5 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Uppgift 2022-12-06!");
+﻿Console.WriteLine("Uppgift 2022-12-06!");
 
 string _message = File.ReadAllText("./data.txt");
 
