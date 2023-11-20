@@ -36,6 +36,8 @@ for (int cy = 0; cy < 99; cy++)
     }
 }
 
+
+
 Console.WriteLine($"S1 : {amount}");
 
 File.WriteAllText(@".\dataDebug.txt", _forrestDebug.ToString());
