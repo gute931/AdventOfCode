@@ -52,7 +52,6 @@ foreach (string _cmd in _filedata)
         saveHeadPosition();
         moveTail(_direction);
         saveTailPosition();
-
     }
 }
 
