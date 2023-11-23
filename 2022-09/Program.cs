@@ -1,14 +1,6 @@
-﻿using _2022_09;
-using System.Diagnostics;
-using System.Net.Security;
-using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿Console.WriteLine("Uppgift 2022-12-09!");
 
-
-Console.WriteLine("Uppgift 2022-12-09!");
-
+// string[] _filedata = File.ReadAllLines("./data.txt");
 string[] _filedata = File.ReadAllLines("./data.txt");
 
 
@@ -28,6 +20,7 @@ ValueTuple<int?, int?> _curTail = (null, null);
 
 // S1 : Declare
 SortedList<int, (int, int)> _rope = new SortedList<int, (int, int)>();
+SortedList<int, (int, int)> _ropePrev = new SortedList<int, (int, int)>();
 _rope[0] = (0, 0);
 ValueTuple<int, int> _ropeHeadPrev = (0, 0);
 /*
@@ -51,8 +44,10 @@ foreach (string _cmd in _filedata)
     string _direction = _cmdParts[0];
     int _steps = Convert.ToInt32(_cmdParts[1]);
 
+
     for (int s = 0; s < _steps; s++)
     {
+        _ropePrev = new SortedList<int, (int, int)>(_rope);
         _prevHead = _curHead;
         _ropeHeadPrev = _rope[0];
 
@@ -78,47 +73,63 @@ foreach (string _cmd in _filedata)
         saveHeadPositionS1();
         moveTailS1(_direction);
         moveTailS2(_direction, _rowNo);
-        renderMap(_cmd, s + 1, _steps);
+
+        // renderMap(_cmd, _rowNo, s + 1, _steps);
+        // Thread.Sleep(50); 
+
     }
+
+    // if (_rope.Count == 10) saveTailPositionS2((int)_rope[9].Item1, (int)_rope[9].Item2);
 }
 
 Console.WriteLine(_tailS1.Distinct().Count());
-// 6190 "
 Console.WriteLine(_tailS2.Distinct().Count());
-// 3668 Too high
 Console.ReadLine();
 
 
 
 void moveTailS2(string direction, int iterations)
 {
-    ValueTuple<int, int> _prev = _ropeHeadPrev;
-    ValueTuple<int, int> _prevTemp = (0, 0);
-    
     if (_rope.Count < 10)
     {
         _rope[_rope.Count] = (0, 0); // Sätt in en bit till av repet.
     }
 
     for (int i = 1; i < _rope.Count; i++)
-    {   
-        _prevTemp = _rope[i-1];
-        int _diffRow = Math.Abs((int)(_rope[i - 1].Item1 - _rope[i].Item1));
-        int _diffCol = Math.Abs((int)(_rope[i - 1].Item2 - _rope[i].Item2));
+    {
+        int _diffRow = (_rope[i - 1].Item1 - _rope[i].Item1);
+        int _diffCol = (_rope[i - 1].Item2 - _rope[i].Item2);
 
-        if (_diffRow > 1 || _diffCol > 1)
+        if (Math.Abs(_diffRow) == 2 && Math.Abs(_diffCol) == 2)
         {
-       
-            _rope[i] = _prev;
-            /* _rope[i] = (_rope[i - 1].Item1, _rope[i - 1].Item2); */
-            if (i == 9) saveTailPositionS2((int)_rope[i].Item1, (int)_rope[i].Item2);
+            int _moveRow = _diffRow == -2 ? -1 : 1;
+            int _moveCol = _diffCol == -2 ? -1 : 1;
+            _rope[i] = (_rope[i].Item1 + _moveRow, _rope[i].Item2 + _moveCol);
         }
-        _prev = _rope[i];
+        else if (Math.Abs(_diffRow) == 2)
+        {
+            _rope[i] = (_rope[i].Item1 + (_diffRow == -2 ? -1 : 1), _rope[i].Item2);
+            if (Math.Abs(_diffCol) == 1)
+            {
+                _rope[i] = (_rope[i].Item1, _rope[i].Item2 + (_diffCol == -1 ? -1 : 1));
+            }
+        }
+        else if (Math.Abs(_diffCol) == 2)
+        {
+            _rope[i] = (_rope[i].Item1, _rope[i].Item2 + (_diffCol == -2 ? -1 : 1));
+            if (Math.Abs(_diffRow) == 1)
+            {
+                _rope[i] = (_rope[i].Item1 + (_diffRow == -1 ? -1 : 1), _rope[i].Item2);
+            }
+        }
+
+        if (i == 9) saveTailPositionS2((int)_rope[i].Item1, (int)_rope[i].Item2);
     }
 }
 
-void renderMap(string cmd, int step, int _steps)
+void renderMap(string cmd, int row, int step, int _steps)
 {
+    Console.CursorVisible = false;
     Console.Clear();
     for (int r = -15; r < 15; r++)
     {
@@ -140,8 +151,16 @@ void renderMap(string cmd, int step, int _steps)
 
     }
     Console.WriteLine("------------------------------------");
-    Console.WriteLine($"Op:{cmd}, step:{step}/{_steps}");
+    Console.WriteLine($"Row: {row}, Oper:{cmd}, step:{step}/{_steps}");
     Console.WriteLine("------------------------------------");
+    Console.WriteLine("--- Tail stats                   ---");
+    Console.WriteLine($"Row: {_tailS2.Count}, Unique#:{_tailS2.Distinct().Count()}");
+    Console.WriteLine("------------------------------------");
+    for (int i = 0; i < _rope.Count; i++)
+    {
+        Console.WriteLine($"{i}: row:{_rope[i].Item1}, col:{_rope[i].Item2}");
+    }
+    Console.CursorVisible = true;
 }
 
 void saveHeadPositionS1()
