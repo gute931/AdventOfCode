@@ -122,10 +122,11 @@ namespace _2022_11
                         break;
                 }
                 int worryLevel = value / 3;
-                
+
+                // worryLevel = value;
                 int _targetMonkey = worryLevel % divisibleBy == 0 ? throwToTrue : throwToFalse;
                 _rl.Add((_targetMonkey, worryLevel));
-                inspectionTotal += worryLevel;
+                // inspectionTotal += worryLevel;
             }
 
             items.Clear();

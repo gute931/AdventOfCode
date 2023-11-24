@@ -3,8 +3,8 @@ using System.Globalization;
 
 Console.WriteLine("Uppgift 2022-12-11!");
 
-string[] _filedata = File.ReadAllLines("./data.txt");
-//string[] _filedata = File.ReadAllLines("./testdata.txt");
+// string[] _filedata = File.ReadAllLines("./data.txt");
+string[] _filedata = File.ReadAllLines("./testdata.txt");
 
 
 // string[] _filedata = File.ReadAllLines("./testdata.txt");
@@ -26,7 +26,7 @@ foreach (string _record in _filedata)
     }
 }
 
-for (int i = 0; i < 1000; i++)
+for (int i = 0; i < 30000; i++)
 {
     foreach (var _monkey in _monkeys)
     {
@@ -37,6 +37,15 @@ for (int i = 0; i < 1000; i++)
             _receiver.addLevel(_result.Item2);
         }
     }
+    if ((i+1) % 1000 == 0)
+    {
+        Console.WriteLine($"=== After {i+1} rounds.");
+            foreach (var _monkey in _monkeys)
+        {
+            Console.Write($", Inspections: {_monkey.Value.inspections}, InspectioTotal: {_monkey.Value.inspectionTotal}");
+        }
+    }
+    Console.WriteLine();
 }
 
 foreach (var _monkey in _monkeys)
