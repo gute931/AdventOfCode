@@ -21,13 +21,13 @@ namespace _2022_11
         public int opitem2Value { get; set; }
 
         public int inspections { get; set; } = 0;
-        public int inspectionTotal { get; set; } = 0;
 
-
-        public Monkey(int MonkeyId)
+        public int st { get; set; }
+        public Monkey(int MonkeyId, int st)
         {
             monkeyId = MonkeyId;
             items = new List<int>();
+            this.st = st;
         }
         internal void addLevel(int level)
         {
@@ -46,7 +46,7 @@ namespace _2022_11
             switch (_parts[0])
             {
                 case "Starting":
-                    for (int i = 2; i < _parts.Length; i+=2)
+                    for (int i = 2; i < _parts.Length; i += 2)
                     {
                         items.Add(int.Parse(_parts[i]));
                     }
@@ -80,7 +80,7 @@ namespace _2022_11
 
         }
 
-        internal List<(int, int)> Process()
+        internal List<(int, int)> Process(double worryLevelNo)
         {
             List<(int, int)> _rl = new List<(int, int)>();
 
@@ -121,9 +121,16 @@ namespace _2022_11
                     default:
                         break;
                 }
-                int worryLevel = value / 3;
+                int worryLevel = value;
+                /*
+                if (st == 1) { worryLevel = value / worryLevelNo; }
+                else if (st== 2) { worryLevel = value; }
+                */
+                if (worryLevelNo > 0)
+                {
+                    worryLevel = (int)((double)value / worryLevelNo);
+                }
 
-                // worryLevel = value;
                 int _targetMonkey = worryLevel % divisibleBy == 0 ? throwToTrue : throwToFalse;
                 _rl.Add((_targetMonkey, worryLevel));
                 // inspectionTotal += worryLevel;
