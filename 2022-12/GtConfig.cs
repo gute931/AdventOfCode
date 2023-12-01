@@ -12,10 +12,10 @@ namespace _2022_12
         public char[,] Matrix { get; private set; }
         public int ROWS { get; private set; }
         public int COLS { get; private set; }
-        public int STARTROW { get; private set; }
-        public int STARTCOL { get; private set; }
-        public int ENDROW { get; private set; }
-        public int ENDCOL { get; private set; }
+        public uint STARTROW { get; private set; }
+        public uint STARTCOL { get; private set; }
+        public uint ENDROW { get; private set; }
+        public uint ENDCOL { get; private set; }
         public readonly char STARTLETTER = 'S';
         public readonly char ENDLETTER = 'E';
         public readonly char[] PATH = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
@@ -34,7 +34,7 @@ namespace _2022_12
             }
         }
 
-        public bool InRange(int row, int col)
+        public bool InRange(uint row, uint col)
         {
             return (row >= 0 && row < ROWS && col >= 0 && col < COLS);
         }
@@ -55,20 +55,20 @@ namespace _2022_12
 
             Matrix = new char[ROWS, COLS];
 
-            int _r = 0;
+            uint _r = 0;
             foreach (string line in _filedata)
             {
                 char[] line_c = line.ToCharArray();
-                for (int _c = 0; _c < line_c.Length; _c++)
+                for (uint _c = 0; _c < line_c.Length; _c++)
                 {
                     Matrix[_r, _c] = line_c[_c];
                     Console.Write(Matrix[_r, _c]);
-                    if (line[_c] == 'S')
+                    if (line[(int)_c] == 'S')
                     {
                         STARTROW = _r;
                         STARTCOL = _c;
                     }
-                    else if (line[_c] == 'E')
+                    else if (line[(int)_c] == 'E')
                     {
                         ENDROW = _r;
                         ENDCOL = _c;
@@ -80,14 +80,15 @@ namespace _2022_12
 
         }
 
-        internal void AddNeighrbourIfValid(List<int> neighBoudList, char _currentLetter, int _r, int _c)
+        internal void AddNeighrbourIfValid(List<uint> neighBoudList, char _currentLetter, uint _r, uint _c)
         {
             _currentLetter = _currentLetter == 'S' ? 'a' : _currentLetter;
+            _currentLetter = _currentLetter == 'E' ? 'z' : _currentLetter;
+
             char _nextLetter = (char)((int)_currentLetter + 1);
             if (InRange(_r, _c))
             {
                 char _neighbour = GtConfig.Instance.Matrix[_r, _c];
-                _neighbour = _neighbour == 'S' ? 'a' : _neighbour;
                 if (_currentLetter == _neighbour || _nextLetter == _neighbour || 'E' == _neighbour)
                 {
                     // int _node = (_r * 1000) + _c;

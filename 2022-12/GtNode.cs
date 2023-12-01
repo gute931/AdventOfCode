@@ -9,14 +9,14 @@ namespace _2022_12
     enum status { deadend, ontrack, start, end };
     internal class GtNode
     {
-        public int currentLetter { get; set; }
+        public uint currentLetter { get; set; }
         char start;
         char slut;
         internal List<(string, GtNode)> _nodes = new List<(string, GtNode)>();
         char[] _search = new char[2];
         status NodeStatus = status.deadend;
         List<string> localPath;
-        public GtNode(int currentRow, int currentCol, int currentLetter, List<string> localPath)
+        public GtNode(uint currentRow, uint currentCol, uint currentLetter, List<string> localPath)
         {
             this.localPath = localPath;
             localPath.Add($"{currentRow}:{currentCol}");
@@ -34,7 +34,7 @@ namespace _2022_12
 
                 }
         */
-        void checkPosition(int currentRow, int currentCol, List<string> localPath)
+        void checkPosition(uint currentRow, uint currentCol, List<string> localPath)
         {
             string _pos = $"{currentRow}:{currentCol}";
             GtConfig.Instance.IncreaseSearchCnt();
