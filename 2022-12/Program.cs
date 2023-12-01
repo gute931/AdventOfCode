@@ -28,7 +28,8 @@ for (int _r = 0; _r < GtConfig.Instance.ROWS; _r++)
     int _nodeC = 0;
     for (int _c = 0; _c < GtConfig.Instance.COLS; _c++)
     {
-        int _node = (_r * 1000) + _c;
+/*         1rr ccc; */
+        int _node = 10000000 + (_r * 10000) + _c;
         char _currentLetter = GtConfig.Instance.Matrix[_r, _c];
         List<int> neighb = new List<int>();
         GtConfig.Instance.AddNeighrbourIfValid(neighb, _currentLetter, _r + 1, _c + 0);
@@ -44,7 +45,9 @@ for (int _r = 0; _r < GtConfig.Instance.ROWS; _r++)
     int _nodeC = 0;
     for (int _c = 0; _c < GtConfig.Instance.COLS; _c++)
     {
-        int _node = (_nodeR * 1000) + _nodeC;
+        // int _node = (_nodeR * 1000) + _nodeC;
+        int _node = 10000000 + (_nodeR * 10000) + _nodeC;
+
         _nodeC++;
     }
     _nodeR++;
@@ -65,15 +68,16 @@ foreach (var item in _neighBoudList)
 }
 
 ShortestPathResult result = graph.Dijkstra(
-    (uint)((GtConfig.Instance.STARTROW * 1000) + GtConfig.Instance.STARTCOL),
-    (uint)((GtConfig.Instance.ENDROW * 1000) + GtConfig.Instance.ENDCOL)); //result contains the shortest path
+    (uint)(10000000 + (GtConfig.Instance.STARTROW * 10000) + GtConfig.Instance.STARTCOL),
+    (uint)(10000000 + (GtConfig.Instance.ENDROW * 10000) + GtConfig.Instance.ENDCOL)); //result contains the shortest path
 
 for (int _r = 0; _r < GtConfig.Instance.ROWS; _r++)
 {
     int _nodeC = 0;
     for (int _c = 0; _c < GtConfig.Instance.COLS; _c++)
     {
-        int _node = (_nodeR * 1000) + _nodeC;
+        int _node = 10000000 + (_nodeR * 10000) + _nodeC;
+        // int _node = (_nodeR * 1000) + _nodeC;
         _node++;
         graph.AddNode(_node);
     }

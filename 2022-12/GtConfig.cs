@@ -90,7 +90,9 @@ namespace _2022_12
                 _neighbour = _neighbour == 'S' ? 'a' : _neighbour;
                 if (_currentLetter == _neighbour || _nextLetter == _neighbour || 'E' == _neighbour)
                 {
-                    int _node = (_r * 1000) + _c;
+                    // int _node = (_r * 1000) + _c;
+                    int _node = 10000000 + (_r * 10000) + _c;
+
                     neighBoudList.Add(_node);
                 }
             }
