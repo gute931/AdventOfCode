@@ -29,7 +29,7 @@ for (uint _r = 0; _r < GtConfig.Instance.ROWS; _r++)
     for (uint _c = 0; _c < GtConfig.Instance.COLS; _c++)
     {
 /*         1rr ccc; */
-        int _node = 10000000 + (_r * 10000) + _c;
+        uint _node = 10000000 + (_r * 10000) + _c;
         char _currentLetter = GtConfig.Instance.Matrix[_r, _c];
         List<uint> neighb = new List<uint>();
         GtConfig.Instance.AddNeighrbourIfValid(neighb, _currentLetter, _r + 1, _c + 0);
