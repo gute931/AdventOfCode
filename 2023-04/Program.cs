@@ -28,7 +28,6 @@ foreach (string _rec in _filedata)
         _s2counter[_card + i] += 1; // for current card
     }
     SUM2 = _s2counter.Sum();
-}
 Console.WriteLine($"S1:{SUM1}");
 Console.WriteLine($"S2:{SUM2}");
 Console.WriteLine();
