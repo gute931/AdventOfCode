@@ -1,0 +1,112 @@
+﻿using _2022_12;
+using Dijkstra.NET.Graph;
+using Dijkstra.NET.ShortestPath;
+
+
+Console.WriteLine("Uppgift 2022-12-12!");
+
+Console.WriteLine($"Rows:{GtConfig.Instance.ROWS}, Cols:{GtConfig.Instance.COLS}");
+Console.WriteLine($"StartRow:{GtConfig.Instance.STARTROW}, STARTCOL:{GtConfig.Instance.STARTCOL}");
+/*
+List<(string, GtNode)> _nodes = new List<(string, GtNode)>();
+
+List<string> localPath = new List<string>();
+
+_nodes.Add(($"{GtConfig.Instance.STARTROW}:{GtConfig.Instance.STARTCOL}", new GtNode(GtConfig.Instance.STARTROW, GtConfig.Instance.STARTCOL, 0, localPath)));
+*/
+var graph2 = new Graph<int, string>() + 1 + 2;
+
+bool connected = graph2 >> 1 >> 2 >> 5 ^ "custome edge information";
+
+ShortestPathResult result = graph2.Dijkstra(1, 2); //result contains the shortest path
+
+var path = result.GetPath();
+
+var graph = new Graph<int, string>();
+Dictionary<int, List<int>> _neighBoudList = new Dictionary<int, List<int>>();
+
+for (int _r = 0; _r < GtConfig.Instance.ROWS; _r++)
+{
+    for (int _c = 0; _c < GtConfig.Instance.COLS; _c++)
+    {
+        /*         1rr ccc; */
+        int _node = GtConfig.Instance.GenerateKey(_r, _c);
+        char _currentLetter = GtConfig.Instance.Matrix[_r, _c];
+        List<int> neighb = new List<int>();
+        GtConfig.Instance.AddNeighrbourIfValid(neighb, _currentLetter, _r + 1, _c + 0);
+        GtConfig.Instance.AddNeighrbourIfValid(neighb, _currentLetter, _r - 1, _c - 0);
+        GtConfig.Instance.AddNeighrbourIfValid(neighb, _currentLetter, _r + 0, _c + 1);
+        GtConfig.Instance.AddNeighrbourIfValid(neighb, _currentLetter, _r - 0, _c - 1);
+        if (neighb.Count > 0) _neighBoudList.Add(_node, neighb);
+    }
+}
+/*
+for (int _r = 0; _r < GtConfig.Instance.ROWS; _r++)
+{
+    int _nodeC = 0;
+    for (int _c = 0; _c < GtConfig.Instance.COLS; _c++)
+    {
+        // int _node = (_nodeR * 1000) + _nodeC;
+        int _node = 10000000 + (_nodeR * 10000) + _nodeC;
+
+        _nodeC++;
+    }
+    _nodeR++;
+}
+*/
+
+
+for (int _nodeR = 0; _nodeR < GtConfig.Instance.ROWS; _nodeR++)
+{
+    for (int _nodeC = 0; _nodeC < GtConfig.Instance.COLS; _nodeC++)
+    {
+        int _node = GtConfig.Instance.GenerateKey(_nodeR, _nodeC);
+        if (_node == 10200000)
+        {
+            int a = 1;
+        }
+        // int _node = (_nodeR * 1000) + _nodeC;
+        _node++;
+        graph.AddNode(_node);
+    }
+}
+
+/*
+foreach (var item in _neighBoudList)
+{
+    if (item.Key == 20000)
+    {
+        Console.WriteLine();
+    }
+    graph.AddNode((int)item.Key);
+}
+
+
+
+*/
+foreach (var item in _neighBoudList)
+{
+    if (item.Key == 20000)
+    {
+        Console.WriteLine();
+    }
+    foreach (var _v in item.Value)
+    {
+
+        graph.Connect((uint)item.Key, (uint)_v, 1, $"{item.Key}:{_v}");
+    }
+}
+graph.
+ShortestPathResult result2 = graph.Dijkstra(1, 10);
+
+ShortestPathResult result42 = graph.Dijkstra(
+    (uint)GtConfig.Instance.GenerateKey(GtConfig.Instance.STARTROW, GtConfig.Instance.STARTCOL),
+    (uint)GtConfig.Instance.GenerateKey(GtConfig.Instance.ENDROW, GtConfig.Instance.ENDCOL)); //result contains the shortest path
+
+
+
+
+Console.ReadLine();
+
+
+

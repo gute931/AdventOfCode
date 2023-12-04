@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dijkstra.NET.Graph;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,10 +13,10 @@ namespace _2022_12
         public char[,] Matrix { get; private set; }
         public int ROWS { get; private set; }
         public int COLS { get; private set; }
-        public uint STARTROW { get; private set; }
-        public uint STARTCOL { get; private set; }
-        public uint ENDROW { get; private set; }
-        public uint ENDCOL { get; private set; }
+        public int STARTROW { get; private set; }
+        public int STARTCOL { get; private set; }
+        public int ENDROW { get; private set; }
+        public int ENDCOL { get; private set; }
         public readonly char STARTLETTER = 'S';
         public readonly char ENDLETTER = 'E';
         public readonly char[] PATH = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
@@ -34,7 +35,7 @@ namespace _2022_12
             }
         }
 
-        public bool InRange(uint row, uint col)
+        public bool InRange(int row, int col)
         {
             return (row >= 0 && row < ROWS && col >= 0 && col < COLS);
         }
@@ -55,15 +56,15 @@ namespace _2022_12
 
             Matrix = new char[ROWS, COLS];
 
-            uint _r = 0;
+            int _r = 0;
             foreach (string line in _filedata)
             {
                 char[] line_c = line.ToCharArray();
-                for (uint _c = 0; _c < line_c.Length; _c++)
+                for (int _c = 0; _c < line_c.Length; _c++)
                 {
                     Matrix[_r, _c] = line_c[_c];
                     Console.Write(Matrix[_r, _c]);
-                    if (line[(int)_c] == 'S')
+                    if (line[_c] == 'S')
                     {
                         STARTROW = _r;
                         STARTCOL = _c;
@@ -80,7 +81,7 @@ namespace _2022_12
 
         }
 
-        internal void AddNeighrbourIfValid(List<uint> neighBoudList, char _currentLetter, uint _r, uint _c)
+        internal void AddNeighrbourIfValid(List<int> neighBoudList, char _currentLetter, int _r, int _c)
         {
             _currentLetter = _currentLetter == 'S' ? 'a' : _currentLetter;
             _currentLetter = _currentLetter == 'E' ? 'z' : _currentLetter;
@@ -92,11 +93,16 @@ namespace _2022_12
                 if (_currentLetter == _neighbour || _nextLetter == _neighbour || 'E' == _neighbour)
                 {
                     // int _node = (_r * 1000) + _c;
-                    uint _node = 10000000 + (_r * 10000) + _c;
+                    int _node = GenerateKey(_r, _c);
 
                     neighBoudList.Add(_node);
                 }
             }
+        }
+
+        internal int GenerateKey(int r, int c)
+        {
+            return 10000000 + (r * 10000) + c;
         }
     }
 }
