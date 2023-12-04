@@ -63,7 +63,7 @@ namespace _2022_12
                 for (int _c = 0; _c < line_c.Length; _c++)
                 {
                     Matrix[_r, _c] = line_c[_c];
-                    Console.Write(Matrix[_r, _c]);
+                    // Console.Write(Matrix[_r, _c]);
                     if (line[_c] == 'S')
                     {
                         STARTROW = _r;
@@ -75,7 +75,7 @@ namespace _2022_12
                         ENDCOL = _c;
                     }
                 }
-                Console.WriteLine();
+                // Console.WriteLine();
                 _r++;
             }
 

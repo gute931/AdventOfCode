@@ -8,12 +8,12 @@ Console.WriteLine($"StartRow:{GtConfig.Instance.STARTROW}, STARTCOL:{GtConfig.In
 
 List<string> localPath = new List<string>();
 
-GtNode  _startNode = new GtNode(GtConfig.Instance.STARTROW, GtConfig.Instance.STARTCOL, 0, localPath, 1);
+GtNode  _startNode = new GtNode(GtConfig.Instance.STARTROW, GtConfig.Instance.STARTCOL, 'a', localPath, 1);
 
 int _antal = _startNode.GetEnd(1);
 
 
-
+Console.WriteLine("End!");
 Console.ReadLine();
 
 
