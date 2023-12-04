@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-Console.WriteLine("Uppgift 2023-12-04!");
+﻿Console.WriteLine("Uppgift 2023-12-04!");
 string[] _filedata = File.ReadAllLines("./data.txt");
 int[] _s2counter = new int[_filedata.Length];
 Array.Fill(_s2counter, 0);
