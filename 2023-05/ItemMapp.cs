@@ -40,8 +40,8 @@
 
             InValue = long.Parse(_dataParts[1]);
             OutValue = long.Parse(_dataParts[0]);
-            Offset = (long)InValue - OutValue;
             Amount = long.Parse(_dataParts[2]);
+            Offset = (long)OutValue - InValue;
         }
 
         internal long GetPointer(long value)

@@ -1,5 +1,7 @@
 ﻿using _2023_05;
 using Application;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 
@@ -90,7 +92,7 @@ for (int i = 0; i < _filedata.Length; i++)
 }
 
 long S1 = int.MaxValue;
-/*
+
 foreach (var _seed in Seeds)
 {
     long _seedNo = long.Parse(_seed);
@@ -99,39 +101,42 @@ foreach (var _seed in Seeds)
     long _fertilizer = translateValue(soil_to_fertilizer, _soil);
     long _water = translateValue(fertilizer_to_water, _fertilizer);
     long _light = translateValue(water_to_light, _water);
-    long _temp = translateValue(light_to_temperature, _light);
-    long _humidity = translateValue(temperature_to_humidity, _temp);
+    long _temperature = translateValue(light_to_temperature, _light);
+    long _humidity = translateValue(temperature_to_humidity, _temperature);
     long _location = translateValue(humidity_to_location, _humidity);
 
     // Console.WriteLine($"Seed:{_seedNo} -> Soil:{_soil} -> Fertilizer:{_fertilizer} -> Water:{_water} -> Light:{_light} -> Temp:{_temp} -> Humidity:{_humidity} -> Location:{_location}.");
 
     S1 = Math.Min(S1, _location);
 }
-*/
+
 long S2 = int.MaxValue;
 for (int i = 0; i < Seeds.Length; i += 2)
 {
     long _seedfrom = long.Parse(Seeds[i]);
     long _seedto = _seedfrom + long.Parse(Seeds[i + 1]) - 1;
-    List<SeedGroup> _start = new List<SeedGroup>() { new SeedGroup(_seedfrom, _seedto) };
-
+    List<SeedGroup> _start = new List<SeedGroup>() { new SeedGroup(_seedfrom, _seedto, 0) };
     List<SeedGroup> _soils = translateValueGrp(seed_to_soil, _start);
-    /*
-    SeedGroup[] _fertilizers = translateValueGrp(soil_to_fertilizer, _soils);
-    SeedGroup[] _waters = translateValueGrp(fertilizer_to_water, _fertilizers);
-    SeedGroup[] _lights = translateValueGrp(water_to_light, _waters);
-    SeedGroup[] _temps = translateValueGrp(light_to_temperature, _lights);
-    SeedGroup[] _humiditys = translateValueGrp(temperature_to_humidity, _temps);
-    SeedGroup[] _locations = translateValueGrp(humidity_to_location, _humiditys);
+    List<SeedGroup> _fertilizers = translateValueGrp(soil_to_fertilizer, _soils);
+    List<SeedGroup> _waters = translateValueGrp(fertilizer_to_water, _fertilizers);
+    List<SeedGroup> _lights = translateValueGrp(water_to_light, _waters);
+    List<SeedGroup> _temperatures = translateValueGrp(light_to_temperature, _lights);
+    List<SeedGroup> _humiditys = translateValueGrp(temperature_to_humidity, _temperatures);
+    List<SeedGroup> _locations = translateValueGrp(humidity_to_location, _humiditys);
     // Console.WriteLine($"Seed:{_seedNo + j} -> Soil:{_soil} -> Fertilizer:{_fertilizer} -> Water:{_water} -> Light:{_light} -> Temp:{_temp} -> Humidity:{_humidity} -> Location:{_location}.");
+
 
     foreach (var item in _locations)
     {
-        S2 = Math.Min(S2, item.ItemFrom + item.Offset);
+        Console.WriteLine($"{item.ItemFrom}-{item.ItemTo}");
     }
-    */
 
+    foreach (var item in _locations)
+    {
+        S2 = Math.Min(S2, item.ItemFrom);
+    }
 }
+
 
 
 Console.WriteLine($"S1:{S1}");
@@ -147,21 +152,51 @@ List<SeedGroup> translateValueGrp(List<ItemMapp> map, List<SeedGroup> valueGrps)
     {
         long _from = item.ItemFrom;
         long _to = item.ItemTo;
+        long end = 0;
         List<ItemMapp> _res = map.Where(w => w.InValueFrom <= item.ItemTo && w.InValueTo >= item.ItemFrom).OrderBy(o => o.InValueFrom).ToList();
-        foreach (var _r in _res)
+        if (_res.Count > 0)
         {
-            Console.WriteLine($"GrpStrt:{item.ItemFrom} <-> GrpEnd:{item.ItemTo} between ValueFrom:{_r.InValueFrom} <-> ValueTo:{_r.InValueTo} # Offset:{_r.Offset}");
-            long _startDiff =  _r.InValueFrom - _from ;
-            long _endDiff = _r.InValueTo - _to;
-            if (_startDiff < 0)
+            foreach (var _r in _res)
             {
-                SeedGroup _a = new SeedGroup(_r.InValueFrom, _to);
+                //  Console.WriteLine($"GrpStrt:{item.ItemFrom} <-> GrpEnd:{item.ItemTo} between ValueFrom:{_r.InValueFrom} <-> ValueTo:{_r.InValueTo} # Offset:{_r.Offset}");
+                long _startDiff = _r.InValueFrom - _from;
+                long _endDiff = _r.InValueTo - _to;
+
+                long start = Math.Max(item.ItemFrom, _r.InValueFrom);
+                end = Math.Min(item.ItemTo, _r.InValueTo);
+
+                if (_from < start)
+                {
+                    SeedGroup _a1 = new SeedGroup(_from, start - 1, 0);
+                    result.Add(_a1);
+                    _from = start;
+                }
+
+                SeedGroup _a = new SeedGroup(start, end, _r.Offset);
+                _from = end + 1;
+                result.Add(_a);
             }
 
-
-
+            if (end < _to)
+            {
+                SeedGroup _a1 = new SeedGroup(end, _to, 0);
+                result.Add(_a1);
+                _to = end;
+            }
         }
+        else
+        {
+            SeedGroup _a1 = new SeedGroup(_from, _to, 0);
+            result.Add(_a1);
+        }
+
     }
+    /*
+    foreach (var item in result)
+    {
+        Console.WriteLine($"F:{item.ItemFrom} - T:{item.ItemFrom} - O:{item.Offset}");
+    }
+    */
     return result;
 }
 

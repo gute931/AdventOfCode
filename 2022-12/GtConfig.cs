@@ -107,7 +107,8 @@ namespace _2022_12
 
         internal GtNode2 ValidNeighbour(int r, int c1, int v, int c2, char[] search)
         {
-            throw new NotImplementedException();
+            return null;
+          //  throw new NotImplementedException();
         }
     }
 }
