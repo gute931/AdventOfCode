@@ -27,13 +27,6 @@ namespace _2022_12
             this.localPath = new List<string>(localPath);
             this.currentLetter = currentLetter;
             MyPosition = $"{currentRow}:{currentCol}";
-            if (currentRow >= 15 && currentRow <= 22 && currentCol >= 108 && currentCol <= 118) {
-                Console.WriteLine($"{currentLetter}:{currentRow}:{currentCol}");
-            }
-            if (currentLetter=='r')
-            {
-               //  Console.WriteLine('r');
-            }
 
             _search[0] = currentLetter;
             if (currentLetter == 'y')
@@ -42,7 +35,6 @@ namespace _2022_12
             }
             else _search[1] = (char)(((int)currentLetter) + 1);
 
-            localPath.Add($"{currentRow}:{currentCol}");
 
             GtConfig.Instance.IncreaseSearchCnt();
             List<(int, int)> _check = new List<(int, int)>();
