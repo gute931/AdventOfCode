@@ -19,7 +19,7 @@ namespace _2022_12
         public int ENDCOL { get; private set; }
         public readonly char STARTLETTER = 'S';
         public readonly char ENDLETTER = 'E';
-        public readonly char[] PATH = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+
         public int SearchCnt { get; private set; } = 0;
         private GtConfig()
         {
@@ -80,29 +80,21 @@ namespace _2022_12
             }
 
         }
-
-        internal void AddNeighrbourIfValid(List<int> neighBoudList, char _currentLetter, int _r, int _c)
-        {
-            _currentLetter = _currentLetter == 'S' ? 'a' : _currentLetter;
-            _currentLetter = _currentLetter == 'E' ? 'z' : _currentLetter;
-
-            char _nextLetter = (char)((int)_currentLetter + 1);
-            if (InRange(_r, _c))
-            {
-                char _neighbour = GtConfig.Instance.Matrix[_r, _c];
-                if (_currentLetter == _neighbour || _nextLetter == _neighbour || 'E' == _neighbour)
-                {
-                    // int _node = (_r * 1000) + _c;
-                    int _node = GenerateKey(_r, _c);
-
-                    neighBoudList.Add(_node);
-                }
-            }
-        }
-
         internal int GenerateKey(int r, int c)
         {
             return 10000000 + (r * 10000) + c;
+        }
+
+        internal GtNode2 ValidNeighbour(int _r, int _c, int _nr, int _nc, char[] _search)
+        {
+            if (GtConfig.Instance.InRange(_nr , _nc))
+            {
+                if (_search.Contains(GtConfig.Instance.Matrix[_nr, _nc]))
+                {
+                    return new GtNode2(_r, _c, _nr, _nc, GtConfig.Instance.Matrix[_r, _c]);
+                }
+            }
+            return null;
         }
     }
 }
