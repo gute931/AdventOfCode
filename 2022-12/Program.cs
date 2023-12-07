@@ -62,19 +62,17 @@ Console.WriteLine(result.ToString());
 bool validNeighbour(int row, int col, char Letter)
 {
     if (Letter == 'E') return false;
-    if (row > 0 && col > 0 && row < ROWS && col < COLS)
+    if (row >= 0 && col >= 0 && row < ROWS && col < COLS)
     {
         int LetterNo = Array.IndexOf(PATH, Letter);
         char _cChar = FILEDATA[row][col];
         if (PATH[LetterNo] == _cChar || PATH[LetterNo + 1] == _cChar)
         {
-
             return true;
         }
     }
     return false;
 };
-
 
 
 string GetKey(int row, int col) { return $"{row}:{col}"; }
