@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace _2023_07
 {
     enum drawresult { Fiveofakind, Fourofakind, Fullhouse, Threeofakind, Twopair, Onepair, Highcard, Nothing }
-    internal class Hand
+    internal class HandS1
     {
         Dictionary<char, int> CardsValueMap = new Dictionary<char, int>();
         //  List<char> Cards;
@@ -26,7 +26,7 @@ namespace _2023_07
         public int cV4 = 0;
         public int cV5 = 0;
 
-        public Hand(int player)
+        public HandS1(int player)
         {
             this.Player = player;
             CardsValueMap.Add('A', 14);
