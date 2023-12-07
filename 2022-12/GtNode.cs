@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace _2022_12
 {
-    enum status { deadend, ontrack, start, end };
+ 
     internal class GtNode
     {
         public char currentLetter { get; set; }

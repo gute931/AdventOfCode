@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace _2022_12
 {
+    enum status { deadend, ontrack, start, end };
     public sealed class GtConfig
     {
         public char[,] Matrix { get; private set; }
@@ -19,7 +20,7 @@ namespace _2022_12
         public int ENDCOL { get; private set; }
         public readonly char STARTLETTER = 'S';
         public readonly char ENDLETTER = 'E';
-        public readonly char[] PATH = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+        public readonly char[] PATH = ['S','a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z','E'];
         public int SearchCnt { get; private set; } = 0;
         private GtConfig()
         {
