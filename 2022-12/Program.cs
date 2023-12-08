@@ -92,7 +92,7 @@ int _antal = _startNode.GetEnd(1);
 int Level = 0;
 List<string> localPath = new List<string>();
 localPath.Add($"{GtConfig.Instance.STARTROW}:{GtConfig.Instance.STARTCOL}");
-
+/*
 try
 {
     GtNode2 _root = new GtNode2(GtConfig.Instance.STARTROW, GtConfig.Instance.STARTCOL, Level, 0, localPath);
@@ -104,6 +104,7 @@ catch (Exception E)
 
     throw;
 }
+*/
 // Console.WriteLine($"SUM1:{_count}");
 
 Console.WriteLine("End!");
