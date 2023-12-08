@@ -1,9 +1,5 @@
 ﻿using _2023_05;
 using Application;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Diagnostics;
 
 Console.WriteLine("Uppgift 2023-12-05!");
 
@@ -125,12 +121,12 @@ for (int i = 0; i < Seeds.Length; i += 2)
     List<SeedGroup> _locations = translateValueGrp(humidity_to_location, _humiditys);
     // Console.WriteLine($"Seed:{_seedNo + j} -> Soil:{_soil} -> Fertilizer:{_fertilizer} -> Water:{_water} -> Light:{_light} -> Temp:{_temp} -> Humidity:{_humidity} -> Location:{_location}.");
 
-
+    /*
     foreach (var item in _locations)
     {
         Console.WriteLine($"{item.ItemFrom}-{item.ItemTo}");
     }
-
+    */
     foreach (var item in _locations)
     {
         S2 = Math.Min(S2, item.ItemFrom);

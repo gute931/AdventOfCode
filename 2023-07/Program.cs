@@ -6,12 +6,11 @@ Console.WriteLine("Uppgift 2023-12-07!");
 
 string[] _data = File.ReadAllLines("./data.txt");
 int Players = _data.Length;
+
 List<HandS1> HandsS1 = new List<HandS1>();
 List<HandS2> HandsS2 = new List<HandS2>();
-for (int i = 0; i < Players; i++) HandsS1.Add(new HandS1(i+1));
+for (int i = 0; i < Players; i++) HandsS1.Add(new HandS1(i + 1));
 for (int i = 0; i < Players; i++) HandsS2.Add(new HandS2(i + 1));
-
-
 
 int rundor = 0;
 
@@ -47,16 +46,14 @@ foreach (var _hand in _result)
 }
 sum1 += (uint)sumGameS1;
 
-
-
 // Step 2
 
 List<HandS2> _resultS2 = HandsS2.OrderByDescending(o => o.Score)
-    .ThenByDescending(o => o.cV1)
-    .ThenByDescending(o => o.cV2)
-    .ThenByDescending(o => o.cV3)
-    .ThenByDescending(o => o.cV4)
-    .ThenByDescending(o => o.cV5).ToList();
+                                .ThenByDescending(o => o.cV1)
+                                .ThenByDescending(o => o.cV2)
+                                .ThenByDescending(o => o.cV3)
+                                .ThenByDescending(o => o.cV4)
+                                .ThenByDescending(o => o.cV5).ToList();
 
 
 _multplpier = Players;
@@ -73,11 +70,11 @@ foreach (var _hand in _resultS2)
 sum2 += sumGameS2;
 File.WriteAllText("../../../GameResult.txt", _sb.ToString());
 
-List<HandS2> _list = HandsS2.Where(w=>w.Jacks > 0).OrderBy(o=>o.Jacks).ThenByDescending(o=>o.Score).ToList();
- _sb = new StringBuilder();
+List<HandS2> _list = HandsS2.Where(w => w.Jacks > 0).OrderBy(o => o.Jacks).ThenByDescending(o => o.Score).ToList();
+_sb = new StringBuilder();
 foreach (var _hand in _list)
 {
-    _sb.AppendLine($"Jacks:{_hand.Jacks}, cards:{String.Concat(_hand.CardsToPlay.OrderBy(o=>o))}, en:{_hand.HandResult.ToString()}, Score:{_hand.Score}");
+    _sb.AppendLine($"Jacks:{_hand.Jacks}, cards:{String.Concat(_hand.CardsToPlay.OrderBy(o => o))}, en:{_hand.HandResult.ToString()}, Score:{_hand.Score}");
 }
 File.WriteAllText("../../../Jacks.txt", _sb.ToString());
 

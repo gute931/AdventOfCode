@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-
 Console.WriteLine("Uppgift 2023-12-05!");
 
 string[] _filedata = File.ReadAllLines("./data.txt");
@@ -27,8 +26,6 @@ for (int _race = 0; _race < _timeItems.Length; _race++)
 
     if (_s > 0) SUM1 *= _s;
 }
-
-
 
 for (int _t = 1; _t <= _times2; _t++)
 {

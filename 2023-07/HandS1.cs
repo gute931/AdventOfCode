@@ -42,14 +42,9 @@ namespace _2023_07
             CardsValueMap.Add('4', 4);
             CardsValueMap.Add('3', 3);
             CardsValueMap.Add('2', 2);
-
-
-
             //  List<char> Cards = new List<char>();
-
-
-
         }
+
         public void PlayRound(string record)
         {
             string[] _cd = record.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
