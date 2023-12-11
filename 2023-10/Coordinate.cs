@@ -32,7 +32,7 @@ namespace _2023_10
             Col = col;
 
         }
-        public moveForward()
+        public void moveForward()
         {
             (int, int) North = (_r - 1, _c);
             (int, int) South = (_r + 1, _c);

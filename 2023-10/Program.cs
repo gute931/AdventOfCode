@@ -1,137 +1,49 @@
 ﻿using _2023_10;
 
 Console.WriteLine("2023-10");
-// string[] _data = File.ReadAllLines("./testdata1.txt");
-string[] _data = File.ReadAllLines("./data.txt");
 
-List<Coordinate> Coordinates = new List<Coordinate>();
-Coordinate _startNode;
-int _startRow = 0;
-int _startCol = 0;
 
-for (int _r = 0; _r < _data.Length; _r++)
+
+SortedList<int, GtCoordinate> _coordinates = new SortedList<int, GtCoordinate>();
+
+// _coordinates.Add(0, new GtCoordinate((GtConfig.Instance.STARTROW, GtConfig.Instance.STARTCOL), 'S', Direction.South));// 
+// _coordinates.Add(1, new GtCoordinate((GtConfig.Instance.STARTROW, GtConfig.Instance.STARTCOL), 'S', Direction.North));
+_coordinates.Add(2, new GtCoordinate((GtConfig.Instance.STARTROW, GtConfig.Instance.STARTCOL), 'S', Direction.West));
+// _coordinates.Add(3, new GtCoordinate((GtConfig.Instance.STARTROW, GtConfig.Instance.STARTCOL), 'S', Direction.East));
+
+for (int i = 0; i < 9; i++)
 {
-    for (int _c = 0; _c < _data[_r].Length; _c++)
+    for (int n = 0; n < _coordinates.Count(); n++)
     {
-        if (_data[_r][_c] == 'S' )
-        {
-            _startRow = _r;
-            _startCol = _c;
+        if (_coordinates[_coordinates.Keys[i]].Status == status.ontrack) {
+            _coordinates[_coordinates.Keys[i]].Step();
         }
     }
-}
-
-SortedList<int, Coordinate> _coordinates = new SortedList<int, Coordinate>();
-
-for (int i = 0; i < 4; i++) _coordinates.Add(i, new Coordinate(_data[_startRow][_startCol], _startRow, _startCol));
-{
-
-}
-
-
-for (int i = 0; i < 10000; i++)
-{
-
-
-}
-
-        int ROWS = _data.Length;
-int COLS = 0;
-for (int _r = 0; _r < ROWS; _r++)
-{
-    COLS = Math.Max(COLS, _data[_r].Length);
-    for (int _c = 0; _c < COLS; _c++)
+    var kalle = _coordinates.GroupBy(w => w.Value.compstr);
+    Console.WriteLine($"*--- {i} ---*");
+    foreach (var item in kalle)
     {
-        (int, int) North = (_r - 1, _c);
-        (int, int) South = (_r + 1, _c);
-        (int, int) East = (_r, _c - 1);
-        (int, int) West = (_r, _c + 1);
-        char _symbol = _data[_r][_c];
-        switch (_data[_r][_c])
-        {
-            case '|':
-                // | is a vertical pipe connecting north and south.
-                if (GtConfig.Instance.InRangeFromTo(North, South))
-                {
-                    Coordinates.Add(new Coordinate(_symbol, _r, _c,North));
-                    Coordinates.Add(new Coordinate(_symbol, _r, _c,South));
-                }
-                break;
-            case '-':
-                // - is a horizontal pipe connecting east and west.
-                if (GtConfig.Instance.InRangeFromTo(South, West))
-                {
-                    Coordinates.Add(new Coordinate(_symbol, _r, _c, South));
-                    Coordinates.Add(new Coordinate(_symbol, _r, _c, West));
-                }
-                break;
-            case 'L':
-                // L is a 90 - degree bend connecting north and east.
-                if (GtConfig.Instance.InRangeFromTo(North, East))
-                {
-                    Coordinates.Add(new Coordinate(_symbol, _r, _c, North));
-                    Coordinates.Add(new Coordinate(_symbol, _r, _c, East));
-                }
-                break;
-            case 'J':
-                // J is a 90 - degree bend connecting north and west.
-                if (GtConfig.Instance.InRangeFromTo(North, West))
-                {
-                    Coordinates.Add(new Coordinate(_symbol, _r, _c, North));
-                    Coordinates.Add(new Coordinate(_symbol, _r, _c, West));
-                }
-                break;
-            case '7':
-                // 7 is a 90 - degree bend connecting south and west.
-                if (GtConfig.Instance.InRangeFromTo(South, West))
-                {
-                    Coordinates.Add(new Coordinate(_symbol, _r, _c, South));
-                    Coordinates.Add(new Coordinate(_symbol, _r, _c, West));
-                }
-                break;
-            case 'F':
-                // F is a 90 - degree bend connecting south and east.
-                if (GtConfig.Instance.InRangeFromTo(South, West))
-                {
-                    Coordinates.Add(new Coordinate(_symbol, _r, _c, South));
-                    Coordinates.Add(new Coordinate(_symbol, _r, _c, West));
-                }
-                break;
-            case 'S':
-                // S is the starting position of the animal; there is a pipe on this tile, but your sketch doesn't show what shape the pipe has.
-                _startNode = new Coordinate(_symbol, _r, _c);
-                Coordinates.Add(_startNode);
-                break;
-            case '.':
-                // . is ground; there is no pipe in this tile.
-                 // Console.WriteLine("No need to save thies coordinate!");
-                break;
-            default:
-                // Console.WriteLine("Shouldn't stopped by here!");
-                break;
-        }
+        Console.WriteLine($"n:{item.Count()}");
 
- 
     }
+
 }
 
-Coordinate _startCoord = Coordinates.Where(coord => coord.StartintPoint).First();
-int kalle = FindNext(_startCoord.Row, _startCoord.Col, 1);
-
-Console.WriteLine($"Rows:{ROWS}, Columns:{COLS}");
-Console.WriteLine($"StartRows:{_startCoord.Row}, StartCol:{_startCoord.Col}");
-Console.WriteLine($"# valid coorinats:{Coordinates.Count()}");
+// Console.WriteLine($"Rows:{ROWS}, Columns:{COLS}");
+// Console.WriteLine($"StartRows:{_startCoord.Row}, StartCol:{_startCoord.Col}");
+// Console.WriteLine($"# valid coorinats:{Coordinates.Count()}");
 
 Console.WriteLine();
 
-int FindNext(int row, int col, int level )
+int FindNext(int row, int col, int level)
 {
     if (level > 100000000)
     {
         Console.WriteLine("Max!");
     }
+    /*
     List<Coordinate> Pointers = Coordinates.Where(d => d.Row == row && d.Col == col).ToList();
-    foreach (var item in Pointers)  
+    foreach (var item in Pointers)
     {
         if (item.StartintPoint)
         {
@@ -140,5 +52,6 @@ int FindNext(int row, int col, int level )
         }
         else FindNext(item.Row, item.Col, level++);
     }
+    */
     return -1;
 }
