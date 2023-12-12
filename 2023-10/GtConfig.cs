@@ -1,6 +1,6 @@
 ﻿namespace _2023_10
 {
-    public enum status { ontrack, loop, deadend };
+    public enum status { ontrack, loop, deadend, Start };
     public sealed class GtConfig
     {
 
@@ -15,7 +15,7 @@
         private GtConfig()
         {
 
-            ParseFile("./testdata1.txt");
+            ParseFile("./data.txt");
             //  Coordinates = new List<Coordinate>();
         }
         private static readonly Lazy<GtConfig> _singleton = new Lazy<GtConfig>(() => new GtConfig());

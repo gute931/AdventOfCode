@@ -19,14 +19,15 @@ namespace _2023_10
         private (int, int) East = (0, -1);
         private (int, int) West = (0, +1);
         public int Level { get; set; } = 0;
+
         public string compstr { get { return $"{Current.Item1}:{Current.Item2}"; } }
+
         public char NextNavigationSymbol;
 
         public CoordinateGroup((int, int) current)
         {
             Current = current;
         }
-
 
         public CoordinateGroup((int, int) from, (int, int) current)
         {
