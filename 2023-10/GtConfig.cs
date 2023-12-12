@@ -15,7 +15,8 @@
         private GtConfig()
         {
 
-            ParseFile("./data.txt");
+            // ParseFile("./data.txt");
+            ParseFile("./testdata1.txt");
             //  Coordinates = new List<Coordinate>();
         }
         private static readonly Lazy<GtConfig> _singleton = new Lazy<GtConfig>(() => new GtConfig());

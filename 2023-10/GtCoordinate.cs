@@ -11,7 +11,6 @@ namespace _2023_10
     public class GtCoordinate
     {
         public (int, int) Current { get; set; }
-        public Direction NextDirection { get; private set; }
         private (int, int) North = (-1, 0);
         private (int, int) South = (+1, 0);
         private (int, int) East = (0, -1);
@@ -21,14 +20,17 @@ namespace _2023_10
         public char CurrentSymbol;
         public status Status { get; set; } = status.ontrack;
         List<string> Log = new List<string>();
+        Direction StartDirection = Direction.None;
+        public Direction EndDirection { get; private set; }
         public List<Point> Path = new List<Point>();
 
         public GtCoordinate((int, int) current, char symbol, Direction direction)
         {
+            StartDirection = direction;
             CurrentSymbol = symbol;
             Current = current;
             PathAdd(Current, CurrentSymbol);
-            NextDirection = direction;
+            EndDirection = direction;
             Log.Add($"{symbol}:{current.Item1}:{current.Item2}");
         }
 
@@ -39,7 +41,7 @@ namespace _2023_10
 
         public void Step()
         {
-            Navigate(NextDirection);
+            Navigate(EndDirection);
             PathAdd(Current, CurrentSymbol);
         }
         public void Navigate(Direction direction)
@@ -111,7 +113,8 @@ namespace _2023_10
                     // S is the starting position of the animal; there is a pipe on this tile, but your sketch doesn't show what shape the pipe has.
                     // Console.WriteLine("S........");
                     Status = status.Start;
-                    break;
+                    return;
+                  
                 case '.':
                     // . is ground; there is no pipe in this tile.
                     // Console.WriteLine("No need to save thies coordinate!");
@@ -123,7 +126,7 @@ namespace _2023_10
             }
             Current = _newPos;
             CurrentSymbol = _symbol;
-            NextDirection = _nextDirection;
+            EndDirection = _nextDirection;
         }
 
     }

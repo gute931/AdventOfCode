@@ -1,4 +1,5 @@
 ﻿using _2023_10;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Security;
 using System.Reflection.Metadata;
 using System.Text;
@@ -43,23 +44,31 @@ for (int _r = 0; _r < GtConfig.Instance.ROWS; _r++) for (int _c = 0; _c < GtConf
 foreach (Point item in _longest.Value.Path)
 {
     _winMapChar[item.Row, item.Col] = item.Boxchar;
-    _winMap[item.Row, item.Col] = '0';
+    // _winMap[item.Row, item.Col] = '0';
+    _winMap[item.Row, item.Col] = item.Symbol;
+
 }
 
 renderMapChar("Drawing");
+renderMap("DrawingSymbols");
 
+
+
+
+char[] _validSymbols = { '|', '-', 'L', 'J', '7', 'F', 'S' };
+/*
 for (int _r = 0; _r < GtConfig.Instance.ROWS; _r++)
 {
     for (int _c = 0; _c < GtConfig.Instance.COLS; _c++)
     {
-        if (_winMap[_r, _c] == '0') break;
-        else _winMap[_r, _c] = '.';
+        if (_validSymbols.Contains(_winMap[_r, _c])) break;
+        else _winMap[_r, _c] = ' ';
     }
 
     for (int _c = GtConfig.Instance.COLS - 1; _c >= 0; _c--)
     {
-        if (_winMap[_r, _c] == '0') break;
-        else _winMap[_r, _c] = '.';
+        if (_validSymbols.Contains(_winMap[_r, _c])) break;
+        else _winMap[_r, _c] = ' ';
     }
 }
 
@@ -67,26 +76,26 @@ for (int _c = 0; _c < GtConfig.Instance.COLS; _c++)
 {
     for (int _r = 0; _r < GtConfig.Instance.ROWS; _r++)
     {
-        if (_winMap[_r, _c] == '0') break;
-        else _winMap[_r, _c] = '.';
+        if (_validSymbols.Contains(_winMap[_r, _c])) break;
+        else _winMap[_r, _c] = ' ';
     }
     for (int _r = GtConfig.Instance.ROWS - 1; _r >= 0; _r--)
     {
-        if (_winMap[_r, _c] == '0') break;
-        else _winMap[_r, _c] = '.';
+        if (_validSymbols.Contains(_winMap[_r, _c])) break;
+        else _winMap[_r, _c] = ' ';
     }
 }
+*/
 
 renderMap("HorizontalDone");
-
-
-for (int x = 0; x < 10; x++)
+/*
+for (int x = 0; x < 15; x++)
 {
     for (int _r = 1; _r < GtConfig.Instance.ROWS - 1; _r++)
     {
         for (int _c = 1; _c < GtConfig.Instance.COLS - 1; _c++)
         {
-            if (_winMap[_r, _c] == '.')
+            if (_winMap[_r, _c] == ' ')
             {
                 int Cleaned = 0;
                 Cleaned += clean(_winMap, _r - 1, _c - 1);
@@ -97,7 +106,7 @@ for (int x = 0; x < 10; x++)
                 Cleaned += clean(_winMap, _r + 1, _c - 1);
                 Cleaned += clean(_winMap, _r + 1, _c);
                 Cleaned += clean(_winMap, _r + 1, _c + 1);
-          
+
             }
         }
     }
@@ -106,7 +115,46 @@ for (int x = 0; x < 10; x++)
 
 renderMap("FinalWash");
 
+*/
+bool inVertical = false;
 
+for (int _r = 0; _r < GtConfig.Instance.ROWS; _r++)
+{
+    bool inHorizontal = false;
+    for (int _c = 0; _c < GtConfig.Instance.COLS; _c++)
+    {
+        char _symbol = _winMap[_r, _c];
+        switch (_symbol)
+        {
+            case '|':
+                inHorizontal = !inHorizontal;
+                break;
+            case '-':
+               // inVertical = !inVertical;
+                break;
+            case '7':
+            case 'J':
+            case 'F':
+            case 'L':
+            case 'S':
+                inHorizontal = !inHorizontal;
+                inVertical = !inVertical;
+                break;
+            case '1':
+                if (!inHorizontal || !inVertical) _winMap[_r, _c] = ' ';
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+
+
+
+renderMap("Clearing step 1");
+
+/*
 for (int _r = 1; _r < GtConfig.Instance.ROWS - 1; _r++)
 {
     int _borders = 0;
@@ -129,11 +177,11 @@ for (int _r = 1; _r < GtConfig.Instance.ROWS - 1; _r++)
 }
 
 renderMap("ODD");
-
+*/
 int clean(char[,] map, int row, int col)
 {
-    int clean = _winMap[row, col] == '1' ? 1 : 0;
-    _winMap[row, col] = clean == 1 ? '.' : _winMap[row, col];
+    int clean = _validSymbols.Contains(_winMap[row, col]) ? 0 : 1;
+    _winMap[row, col] = clean == 1 ? ' ' : _winMap[row, col];
     return clean;
 }
 
@@ -145,10 +193,14 @@ for (int _r = 0; _r < GtConfig.Instance.ROWS; _r++) for (int _c = 0; _c < GtConf
 
 
 
+
+
 Console.WriteLine($"S2:{S2}");
 
 
 Console.WriteLine();
+
+
 
 void renderMapChar(string suffix)
 {
