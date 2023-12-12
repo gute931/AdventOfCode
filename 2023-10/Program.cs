@@ -24,7 +24,6 @@ for (int i = 0; i < 9; i++)
     foreach (var item in kalle)
     {
         Console.WriteLine($"n:{item.Count()}");
-
     }
 
 }
