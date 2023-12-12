@@ -21,21 +21,31 @@ namespace _2023_10
         public char CurrentSymbol;
         public status Status { get; set; } = status.ontrack;
         List<string> Log = new List<string>();
+        public List<Point> Path = new List<Point>();
 
         public GtCoordinate((int, int) current, char symbol, Direction direction)
         {
+            CurrentSymbol = symbol;
             Current = current;
+            PathAdd(Current, CurrentSymbol);
             NextDirection = direction;
             Log.Add($"{symbol}:{current.Item1}:{current.Item2}");
         }
+
+        private void PathAdd((int, int) current, char currentSymbol)
+        {
+            Path.Add(new Point(current.Item1, current.Item2, currentSymbol));
+        }
+
         public void Step()
         {
             Navigate(NextDirection);
+            PathAdd(Current, CurrentSymbol);
         }
         public void Navigate(Direction direction)
         {
             Level++;
-            Console.WriteLine($"Lvl:{Level}, Direction:{direction}: CP:{Current.Item1}:{Current.Item2}, CurrentSymbol:{CurrentSymbol}");
+            // Console.WriteLine($"Lvl:{Level}, Direction:{direction}: CP:{Current.Item1}:{Current.Item2}, CurrentSymbol:{CurrentSymbol}");
             // Move to ordered location
             (int, int) _newPos = (-9, -9);
             switch (direction)
@@ -56,16 +66,16 @@ namespace _2023_10
             }
 
             // 
-            Console.WriteLine($"Lvl:{Level}, Direction:{direction}: NP:{_newPos.Item1}:{_newPos.Item2}");
+            // Console.WriteLine($"Lvl:{Level}, Direction:{direction}: NP:{_newPos.Item1}:{_newPos.Item2}");
             if (!GtConfig.Instance.InRange(_newPos.Item1, _newPos.Item2))
             {
                 Status = status.deadend;
-                Console.WriteLine("Dead End!!!");
+                // Console.WriteLine("Dead End!!!");
                 return;
             }
             Direction _nextDirection = Direction.None;
             char _symbol = GtConfig.Instance.Data[_newPos.Item1][_newPos.Item2];
-            Console.WriteLine($"Lvl:{Level}, Direction:{direction}: NP:{_newPos.Item1}:{_newPos.Item2}, NextSymbol:{_symbol}");
+            // Console.WriteLine($"Lvl:{Level}, Direction:{direction}: NP:{_newPos.Item1}:{_newPos.Item2}, NextSymbol:{_symbol}");
             switch (_symbol)
             {
                 case '|':
@@ -79,37 +89,38 @@ namespace _2023_10
                     break;
                 case 'L':
                     // L is a 90 - degree bend connecting north and east.
-                    if (direction == Direction.South) _nextDirection = Direction.East;
-                    else if (direction == Direction.West) _nextDirection = Direction.North;
-                    break;
-                case 'J':
-                    // J is a 90 - degree bend connecting north and west.
                     if (direction == Direction.South) _nextDirection = Direction.West;
                     else if (direction == Direction.East) _nextDirection = Direction.North;
                     break;
+                case 'J':
+                    // J is a 90 - degree bend connecting north and west.
+                    if (direction == Direction.South) _nextDirection = Direction.East;
+                    else if (direction == Direction.West) _nextDirection = Direction.North;
+                    break;
                 case '7':
                     // 7 is a 90 - degree bend connecting south and west.
-                    if (direction == Direction.North) _nextDirection = Direction.West;
-                    else if (direction == Direction.East) _nextDirection = Direction.South;
-                    break;
-                case 'F':
-                    // F is a 90 - degree bend connecting south and east.
                     if (direction == Direction.North) _nextDirection = Direction.East;
                     else if (direction == Direction.West) _nextDirection = Direction.South;
                     break;
+                case 'F':
+                    // F is a 90 - degree bend connecting south and east.
+                    if (direction == Direction.North) _nextDirection = Direction.West;
+                    else if (direction == Direction.East) _nextDirection = Direction.South;
+                    break;
                 case 'S':
                     // S is the starting position of the animal; there is a pipe on this tile, but your sketch doesn't show what shape the pipe has.
-                    Console.WriteLine("S........");
+                    // Console.WriteLine("S........");
+                    Status = status.Start;
                     break;
                 case '.':
                     // . is ground; there is no pipe in this tile.
-                    Console.WriteLine("No need to save thies coordinate!");
+                    // Console.WriteLine("No need to save thies coordinate!");
+                    Status = status.deadend;
                     break;
                 default:
-                    Console.WriteLine("Shouldn't stopped by here!");
+                    // Console.WriteLine("Shouldn't stopped by here!");
                     break;
             }
-            Console.WriteLine($"");
             Current = _newPos;
             CurrentSymbol = _symbol;
             NextDirection = _nextDirection;
