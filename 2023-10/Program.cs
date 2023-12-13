@@ -35,9 +35,17 @@ for (int n = 0; n < _coordinates.Count(); n++)
 }
 Console.WriteLine($"S1:{max / 2}");
 
+char[] ValidSymbols = { '|', '-', 'L', 'J', '7', 'F', 'S' };
+char[] NorthStop = ['-', 'F', 'L'];
+char[] SouthStop = ['-', 'L', 'J'];
+char[] WestStop = ['|', 'J', '7', 'F', 'L'];
+char[] EastStop = ['|', 'J', '7', 'F', 'L'];
 char _insideLoopChar = '1';
 string _insideLoopString = "1";
 char _wasteChar = ' ';
+
+int MaxRow = GtConfig.Instance.ROWS;
+int MaxCol = GtConfig.Instance.COLS;
 
 
 var _longest = _coordinates.OrderByDescending(o => o.Value.Level).First();
@@ -56,12 +64,107 @@ foreach (Point item in _longest.Value.Path)
 
 }
 
+GtCoordinate _longest.Value.Path.OrderBy(o => o.Row).ThenBy(o => o.Col).First();
+
+
+// Start in the middle row, find first border symbol, Then follow border clockwise
+(int, int) StartOfBorder = (0, 0);
+
+
+mazeOuterBoundary sideOfBorder = mazeOuterBoundary.notset;
+Direction _nextMove = Direction.None;
+for (int _c = 0; _c < MaxCol; _c++)
+{
+    if (ValidSymbols.Contains(_winMap[Math.Abs(MaxRow), _c]))
+    {
+        StartOfBorder = (Math.Abs(MaxRow), _c);
+        switch (_winMap[Math.Abs(MaxRow), _c])
+        {
+            case '|':
+                sideOfBorder = mazeOuterBoundary.East;
+                _nextMove = Direction.North;
+                break;
+            case 'L':
+            case 'F':
+                sideOfBorder = mazeOuterBoundary.East;
+                _nextMove = Direction.West;
+                break;
+            default:
+                Console.WriteLine("Should not end up here!");
+                break;
+        }
+    }
+
+}
+
+int _bRow = StartOfBorder.Item1;
+int _bCol = StartOfBorder.Item2;
+bool _end = false;
+
+while (_end)
+{
+    switch (_nextMove)
+    {
+        case Direction.North:
+            _bRow--;
+            break;
+        case Direction.South:
+            _bRow++;
+            break;
+        case Direction.East:
+            _bCol--;
+            break;
+        case Direction.West:
+            _bCol++;
+            break;
+    }
+
+
+
+
+}
+
+void ClearAllInADirection(int row, int col, mazeOuterBoundary borderSide)
+{
+    switch (borderSide)
+    {
+        case mazeOuterBoundary.East:
+            for (int _c = col; _c >= 0; _c--)
+            {
+                if (!ValidSymbols.Contains(_winMap[row, _c])) _winMap[row, _c] = _wasteChar;
+                else return;
+            }
+            break;
+        case mazeOuterBoundary.West:
+            for (int _c = col; _c < MaxCol; _c++)
+            {
+                if (!ValidSymbols.Contains(_winMap[row, _c])) _winMap[row, _c] = _wasteChar;
+                else return;
+            }
+            break;
+        case mazeOuterBoundary.North:
+            for (int _r = row; _r >= 0; _r--)
+            {
+                if (!ValidSymbols.Contains(_winMap[_r, col])) _winMap[_r, col] = _wasteChar;
+                else return;
+            }
+            break;
+        case mazeOuterBoundary.South:
+            for (int _r = row; _r < MaxCol; _r++)
+            {
+                if (!ValidSymbols.Contains(_winMap[_r, col])) _winMap[_r, col] = _wasteChar;
+                else return;
+            }
+            break;
+
+    }
+}
+
 renderMapChar("00_Drawing");
 renderMap("00_DrawingSymbols");
 
 
-int MaxRow = GtConfig.Instance.ROWS;
-int MaxCol = GtConfig.Instance.COLS;
+
 int[,] _checked = new int[MaxRow, MaxCol];
 for (int _r = 0; _r < GtConfig.Instance.ROWS; _r++)
 {
@@ -75,7 +178,7 @@ int _checkNo = 0;
 char[] ValidSymbols = { '|', '-', 'L', 'J', '7', 'F', 'S' };
 char[] NorthStop = ['-', 'F', 'L'];
 char[] SouthStop = ['-', 'L', 'J'];
-char[] WestStop = ['|', 'J', '7','F','L'];
+char[] WestStop = ['|', 'J', '7', 'F', 'L'];
 char[] EastStop = ['|', 'J', '7', 'F', 'L'];
 
 checkNclear(0, -1, gtDirection.West);

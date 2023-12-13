@@ -3,7 +3,7 @@
     public enum status { ontrack, loop, deadend, Start };
     public enum border { outside, towardsout, towardsin, inside}
     public enum gtDirection { None, North, South, East, West }
-
+    public enum mazeOuterBoundary { notset, East, West, North, South}
     public sealed class GtConfig
     {
 
