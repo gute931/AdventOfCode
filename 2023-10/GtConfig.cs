@@ -1,6 +1,9 @@
 ﻿namespace _2023_10
 {
     public enum status { ontrack, loop, deadend, Start };
+    public enum border { outside, towardsout, towardsin, inside}
+    public enum gtDirection { None, North, South, East, West }
+
     public sealed class GtConfig
     {
 

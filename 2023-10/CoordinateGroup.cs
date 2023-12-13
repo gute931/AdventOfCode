@@ -8,7 +8,6 @@ using System.Xml.XPath;
 
 namespace _2023_10
 {
-    public enum Direction { None, North, South, East, West }
     public class CoordinateGroup
     {
         public (int, int) From { get; set; }
@@ -35,24 +34,24 @@ namespace _2023_10
             Current = current;
         }
 
-        public (int, int) Add((int, int) Position, Direction N1)
+        public (int, int) Add((int, int) Position, gtDirection N1)
         {
             (int, int) _r = (0, 0);
             switch (N1)
             {
-                case Direction.North:
+                case gtDirection.North:
                     _r.Item1 = Position.Item1 + North.Item1;
                     _r.Item2 = Position.Item2 + North.Item2;
                     break;
-                case Direction.South:
+                case gtDirection.South:
                     _r.Item1 = Position.Item1 + South.Item1;
                     _r.Item2 = Position.Item2 + South.Item2;
                     break;
-                case Direction.East:
+                case gtDirection.East:
                     _r.Item1 = Position.Item1 + East.Item1;
                     _r.Item2 = Position.Item2 + East.Item2;
                     break;
-                case Direction.West:
+                case gtDirection.West:
                     _r.Item1 = Position.Item1 + West.Item1;
                     _r.Item2 = Position.Item2 + West.Item2;
                     break;
@@ -71,8 +70,8 @@ namespace _2023_10
                     if (GtConfig.Instance.InRangeFromTo(North, South))
                     {
                         // | is a vertical pipe connecting north and south.
-                        if (!Add(Current, Direction.North).Equals(From)) Navigate(Direction.North);
-                        else if (!Add(Current, Direction.South).Equals(From)) Navigate(Direction.South);
+                        if (!Add(Current, gtDirection.North).Equals(From)) Navigate(gtDirection.North);
+                        else if (!Add(Current, gtDirection.South).Equals(From)) Navigate(gtDirection.South);
                     }
                     else
                     {
@@ -83,8 +82,8 @@ namespace _2023_10
                     // - is a horizontal pipe connecting east and west.
                     if (GtConfig.Instance.InRangeFromTo(East, West))
                     {
-                        if (!Add(Current, Direction.East).Equals(From)) Navigate(Direction.East);
-                        else if (!Add(Current, Direction.West).Equals(From)) Navigate(Direction.West);
+                        if (!Add(Current, gtDirection.East).Equals(From)) Navigate(gtDirection.East);
+                        else if (!Add(Current, gtDirection.West).Equals(From)) Navigate(gtDirection.West);
                     }
                     else
                     {
@@ -95,8 +94,8 @@ namespace _2023_10
                     // L is a 90 - degree bend connecting north and east.
                     if (GtConfig.Instance.InRangeFromTo(North, East))
                     {
-                        if (!Add(Current, Direction.North).Equals(From)) Navigate(Direction.North);
-                        else if (!Add(Current, Direction.East).Equals(From)) Navigate(Direction.East);
+                        if (!Add(Current, gtDirection.North).Equals(From)) Navigate(gtDirection.North);
+                        else if (!Add(Current, gtDirection.East).Equals(From)) Navigate(gtDirection.East);
                     }
                     else
                     {
@@ -107,8 +106,8 @@ namespace _2023_10
                     // J is a 90 - degree bend connecting north and west.
                     if (GtConfig.Instance.InRangeFromTo(North, West))
                     {
-                        if (!Add(Current, Direction.North).Equals(From)) Navigate(Direction.North);
-                        else if (!Add(Current, Direction.West).Equals(From)) Navigate(Direction.West);
+                        if (!Add(Current, gtDirection.North).Equals(From)) Navigate(gtDirection.North);
+                        else if (!Add(Current, gtDirection.West).Equals(From)) Navigate(gtDirection.West);
                     }
                     else
                     {
@@ -119,8 +118,8 @@ namespace _2023_10
                     // 7 is a 90 - degree bend connecting south and west.
                     if (GtConfig.Instance.InRangeFromTo(South, West))
                     {
-                        if (!Add(Current, Direction.South).Equals(From)) Navigate(Direction.South);
-                        else if (!Add(Current, Direction.West).Equals(From)) Navigate(Direction.West);
+                        if (!Add(Current, gtDirection.South).Equals(From)) Navigate(gtDirection.South);
+                        else if (!Add(Current, gtDirection.West).Equals(From)) Navigate(gtDirection.West);
                     }
                     else
                     {
@@ -131,8 +130,8 @@ namespace _2023_10
                     // F is a 90 - degree bend connecting south and east.
                     if (GtConfig.Instance.InRangeFromTo(South, West))
                     {
-                        if (!Add(Current, Direction.South).Equals(From)) Navigate(Direction.South);
-                        else if (!Add(Current, Direction.East).Equals(From)) Navigate(Direction.East);
+                        if (!Add(Current, gtDirection.South).Equals(From)) Navigate(gtDirection.South);
+                        else if (!Add(Current, gtDirection.East).Equals(From)) Navigate(gtDirection.East);
                     }
                     else
                     {
@@ -154,7 +153,7 @@ namespace _2023_10
 
         }
 
-        private void Navigate(Direction dir)
+        private void Navigate(gtDirection dir)
         {
             {
                 From = Current;
