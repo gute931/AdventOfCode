@@ -64,30 +64,163 @@ foreach (Point item in _longest.Value.Path)
 
 }
 
-GtCoordinate _longest.Value.Path.OrderBy(o => o.Row).ThenBy(o => o.Col).First();
+renderMapChar("00_Drawing");
+renderMap("00_DrawingSymbols");
 
 
-// Start in the middle row, find first border symbol, Then follow border clockwise
-(int, int) StartOfBorder = (0, 0);
-
-
+gtDirection _nextMove = gtDirection.None;
 mazeOuterBoundary sideOfBorder = mazeOuterBoundary.notset;
-Direction _nextMove = Direction.None;
+Point StartOfBorder = _longest.Value.Path.OrderBy(o => o.Row).ThenBy(o => o.Col).First();
+StartOfBorder = _longest.Value.Path[_longest.Value.Path.Count - 1];
+char _startSymbol = _winMap[StartOfBorder.Row, StartOfBorder.Col];
+// Start in the middle row, find first border symbol, Then follow border clockwise
+if (_startSymbol == '7')
+{
+    sideOfBorder = mazeOuterBoundary.East;
+    _nextMove = gtDirection.South;
+}
+
+for (int _p = _longest.Value.Path.Count - 1; _p >= 0; _p--)
+{
+    Point _point = _longest.Value.Path[_p];
+    char _symbol = _winMap[_point.Row, _point.Col];
+    switch (_nextMove)
+    {
+        case gtDirection.North:
+            switch (_symbol)
+            {
+                case '|':
+                    _nextMove = gtDirection.North;
+                    break;
+                case 'F':
+                    _nextMove = gtDirection.West;
+                    sideOfBorder = sideOfBorder == mazeOuterBoundary.West ? mazeOuterBoundary.South : mazeOuterBoundary.North;
+
+                    break;
+                case '7':
+                    _nextMove = gtDirection.East;
+                    sideOfBorder = sideOfBorder == mazeOuterBoundary.West ? mazeOuterBoundary.North : mazeOuterBoundary.South;
+                    break;
+            }
+            break;
+        case gtDirection.South:
+            switch (_symbol)
+            {
+                case '|':
+                    _nextMove = gtDirection.South;
+                    break;
+                case 'L':
+                    _nextMove = gtDirection.West;
+                    sideOfBorder = sideOfBorder == mazeOuterBoundary.West ? mazeOuterBoundary.North : mazeOuterBoundary.South;
+                    
+                    break;
+                case 'J':
+                    _nextMove = gtDirection.East;
+                    sideOfBorder = sideOfBorder == mazeOuterBoundary.West ? mazeOuterBoundary.South : mazeOuterBoundary.North;
+                    break;
+            }
+            break;
+        case gtDirection.East:
+            switch (_symbol)
+            {
+                case '-':
+                    _nextMove = gtDirection.East;
+                    break;
+                case 'F':
+                    _nextMove = gtDirection.South;
+                    sideOfBorder = sideOfBorder == mazeOuterBoundary.North ? mazeOuterBoundary.West : mazeOuterBoundary.East;
+
+                    break;
+                case 'L':
+                    _nextMove = gtDirection.North;
+                    sideOfBorder = sideOfBorder == mazeOuterBoundary.North ? mazeOuterBoundary.East : mazeOuterBoundary.West;
+                    break;
+            }
+            break;
+        case gtDirection.West:
+            switch (_symbol)
+            {
+                case '-':
+                    _nextMove = gtDirection.East;
+                    break;
+                case '7':
+                    _nextMove = gtDirection.South;
+                    sideOfBorder = sideOfBorder == mazeOuterBoundary.North ? mazeOuterBoundary.West : mazeOuterBoundary.East;
+
+                    break;
+                case 'J':
+                    _nextMove = gtDirection.North;
+                    sideOfBorder = sideOfBorder == mazeOuterBoundary.North ? mazeOuterBoundary.East : mazeOuterBoundary.West;
+                    break;
+            }
+            break;
+        default:
+            break;
+    }
+    ClearAllInADirection(_point.Row, _point.Col, sideOfBorder);
+    Console.WriteLine($"symbol:{_symbol}, nextDir:{_nextMove}, outsideis:{sideOfBorder}");
+}
+
+renderMapChar("01_Clear");
+
+
+void ClearAllInADirection(int row, int col, mazeOuterBoundary borderSide)
+{
+    switch (borderSide)
+    {
+        case mazeOuterBoundary.East:
+            for (int _c = col-1; _c >= 0; _c--)
+            {
+                if (ClearIfNotSymbol(row, _c, borderSide)) return;
+            }
+            break;
+        case mazeOuterBoundary.West:
+            for (int _c = col+1; _c < MaxCol; _c++)
+            {
+                if (ClearIfNotSymbol(row, _c, borderSide)) return;
+            }
+            break;
+        case mazeOuterBoundary.North:
+            for (int _r = row-1; _r >= 0; _r--)
+            {
+                if (ClearIfNotSymbol(_r, col, borderSide)) return;
+            }
+            break;
+        case mazeOuterBoundary.South:
+            for (int _r = row+1; _r < MaxRow; _r++)
+            {
+                if (ClearIfNotSymbol(_r, col, borderSide)) return;
+            }
+            break;
+
+    }
+}
+
+bool ClearIfNotSymbol(int row, int col, mazeOuterBoundary borderSide)
+{
+    bool _eod = false;
+    Console.WriteLine($"row:{row}, col:{col}, borderSide:{borderSide}, data:{_winMap[row, col]}");
+    if (!ValidSymbols.Contains(_winMap[row, col])) _winMap[row, col] = _wasteChar;
+    else _eod = true;
+    return _eod;
+}
+
+
 for (int _c = 0; _c < MaxCol; _c++)
 {
     if (ValidSymbols.Contains(_winMap[Math.Abs(MaxRow), _c]))
     {
-        StartOfBorder = (Math.Abs(MaxRow), _c);
+        (int, int) sof = (Math.Abs(MaxRow), _c);
         switch (_winMap[Math.Abs(MaxRow), _c])
         {
             case '|':
                 sideOfBorder = mazeOuterBoundary.East;
-                _nextMove = Direction.North;
+                _nextMove = gtDirection.North;
                 break;
             case 'L':
             case 'F':
                 sideOfBorder = mazeOuterBoundary.East;
-                _nextMove = Direction.West;
+                _nextMove = gtDirection.West;
                 break;
             default:
                 Console.WriteLine("Should not end up here!");
@@ -97,24 +230,24 @@ for (int _c = 0; _c < MaxCol; _c++)
 
 }
 
-int _bRow = StartOfBorder.Item1;
-int _bCol = StartOfBorder.Item2;
+int _bRow = 1;
+int _bCol = 1;
 bool _end = false;
 
 while (_end)
 {
     switch (_nextMove)
     {
-        case Direction.North:
+        case gtDirection.North:
             _bRow--;
             break;
-        case Direction.South:
+        case gtDirection.South:
             _bRow++;
             break;
-        case Direction.East:
+        case gtDirection.East:
             _bCol--;
             break;
-        case Direction.West:
+        case gtDirection.West:
             _bCol++;
             break;
     }
@@ -124,44 +257,7 @@ while (_end)
 
 }
 
-void ClearAllInADirection(int row, int col, mazeOuterBoundary borderSide)
-{
-    switch (borderSide)
-    {
-        case mazeOuterBoundary.East:
-            for (int _c = col; _c >= 0; _c--)
-            {
-                if (!ValidSymbols.Contains(_winMap[row, _c])) _winMap[row, _c] = _wasteChar;
-                else return;
-            }
-            break;
-        case mazeOuterBoundary.West:
-            for (int _c = col; _c < MaxCol; _c++)
-            {
-                if (!ValidSymbols.Contains(_winMap[row, _c])) _winMap[row, _c] = _wasteChar;
-                else return;
-            }
-            break;
-        case mazeOuterBoundary.North:
-            for (int _r = row; _r >= 0; _r--)
-            {
-                if (!ValidSymbols.Contains(_winMap[_r, col])) _winMap[_r, col] = _wasteChar;
-                else return;
-            }
-            break;
-        case mazeOuterBoundary.South:
-            for (int _r = row; _r < MaxCol; _r++)
-            {
-                if (!ValidSymbols.Contains(_winMap[_r, col])) _winMap[_r, col] = _wasteChar;
-                else return;
-            }
-            break;
 
-    }
-}
-
-renderMapChar("00_Drawing");
-renderMap("00_DrawingSymbols");
 
 
 
@@ -174,12 +270,6 @@ for (int _r = 0; _r < GtConfig.Instance.ROWS; _r++)
     }
 }
 int _checkNo = 0;
-
-char[] ValidSymbols = { '|', '-', 'L', 'J', '7', 'F', 'S' };
-char[] NorthStop = ['-', 'F', 'L'];
-char[] SouthStop = ['-', 'L', 'J'];
-char[] WestStop = ['|', 'J', '7', 'F', 'L'];
-char[] EastStop = ['|', 'J', '7', 'F', 'L'];
 
 checkNclear(0, -1, gtDirection.West);
 checkNclear(-1, 0, gtDirection.South);
