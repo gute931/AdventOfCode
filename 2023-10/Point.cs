@@ -9,14 +9,17 @@ namespace _2023_10
 {
     public class Point
     {
+        public int Sequence { get; set; }
         public int Row;
         public int Col;
         public char Symbol;
         public string Boxchar;
+        public mazeOuterBoundary DirectionIsOutside { get; set; }
 
 
-        public Point(int item1, int item2, char symbol)
+        public Point(int item1, int item2, char symbol, int seq)
         {
+            Sequence = seq;
             Row = item1;
             Col = item2;
             Symbol = symbol;

@@ -8,7 +8,7 @@ using System.Xml.XPath;
 
 namespace _2023_10
 {
-    public class GtCoordinate
+    public class GtMaze
     {
         public (int, int) Current { get; set; }
         private (int, int) North = (-1, 0);
@@ -24,7 +24,9 @@ namespace _2023_10
         public gtDirection EndDirection { get; private set; }
         public List<Point> Path = new List<Point>();
 
-        public GtCoordinate((int, int) current, char symbol, gtDirection direction)
+
+
+        public GtMaze((int, int) current, char symbol, gtDirection direction)
         {
             StartDirection = direction;
             CurrentSymbol = symbol;
@@ -34,16 +36,56 @@ namespace _2023_10
             Log.Add($"{symbol}:{current.Item1}:{current.Item2}");
         }
 
+        public void SavePath()
+        {
+            StringBuilder _sb = new StringBuilder();
+            foreach (Point p in Path)
+            {
+                _sb.AppendLine($" [{p.Sequence}]:{p.Row}-{p.Col} {p.Symbol} : {p.Boxchar}");
+            }
+            File.WriteAllText(@"..\..\..\99_Path.txt", _sb.ToString());
+        }
+
+
+        internal void CloseLoop()
+        {
+            Point _s = Path.First();
+            Point _e = Path.Last();
+
+            int _diffRow = _e.Row - _s.Row;
+            int _diffCol = _e.Col - _s.Col;
+            char _symbol = ' ';
+
+            if (_diffRow == -1 && _diffCol == -1) _symbol = ' ';
+            else if (_diffRow == 0 && _diffCol == -1) _symbol = '-';
+            else if (_diffRow == +1 && _diffCol == -1) _symbol = ' ';
+            else if (_diffRow == -1 && _diffCol == 0) _symbol = '|';
+            else if (_diffRow == +1 && _diffCol == 0) _symbol = ' ';
+            else if (_diffRow == -1 && _diffCol == +1) _symbol = ' ';
+            else if (_diffRow == 0 && _diffCol == +1) _symbol = '-';
+            else if (_diffRow == +1 && _diffCol == +1) _symbol = ' ';
+        }
+
+        internal void SetFindOutside()
+        {
+
+        }
+
+
         private void PathAdd((int, int) current, char currentSymbol)
         {
-            Path.Add(new Point(current.Item1, current.Item2, currentSymbol));
+            Path.Add(new Point(current.Item1, current.Item2, currentSymbol, Path.Count()));
         }
 
         public void Step()
         {
             Navigate(EndDirection);
-            PathAdd(Current, CurrentSymbol);
+            if (Status == status.ontrack) PathAdd(Current, CurrentSymbol);
         }
+
+
+
+
         public void Navigate(gtDirection direction)
         {
             Level++;
@@ -113,8 +155,9 @@ namespace _2023_10
                     // S is the starting position of the animal; there is a pipe on this tile, but your sketch doesn't show what shape the pipe has.
                     // Console.WriteLine("S........");
                     Status = status.Start;
-                    return;
-                  
+                    _symbol = 'F';
+                    break;
+
                 case '.':
                     // . is ground; there is no pipe in this tile.
                     // Console.WriteLine("No need to save thies coordinate!");
