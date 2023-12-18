@@ -10,38 +10,51 @@ List<string> Data = File.ReadAllLines("testdata.txt").ToList();
 Console.WriteLine($"S1:{AocStep1(Data)}");
 //Data = File.ReadAllLines("testdata.txt").ToList();
 
+/*
+List<string> DataTest = new List<string>(Data);
+File.WriteAllLines($"..\\..\\..\\00_trace_{0}.txt", DataTest);
+DataTest = RotateList(DataTest);
+DataTest = moveItems(DataTest, MoveDirection.Right);
+DataTest = RotateList(DataTest);
+File.WriteAllLines($"..\\..\\..\\00_trace_1_north.txt", DataTest);
+DataTest = moveItems(DataTest, MoveDirection.Left);
+File.WriteAllLines($"..\\..\\..\\00_trace_1_west.txt", DataTest);
+
+DataTest = RotateList(DataTest);
+DataTest = moveItems(DataTest, MoveDirection.Left);
+DataTest = RotateList(DataTest);
+File.WriteAllLines($"..\\..\\..\\00_trace_1_south.txt", DataTest);
+DataTest = moveItems(DataTest, MoveDirection.Right);
+File.WriteAllLines($"..\\..\\..\\00_trace_1_east.txt", DataTest);
+
+*/
+
+
 SortedList<string, int> DataKeys = new SortedList<string, int>();
 
 for (int moves = 1; moves <= 1000000000; moves++)
 {
+
     foreach (MoveOrientation orientation in Enum.GetValues(typeof(MoveOrientation)))
     {
-        List<string> pivot = RotateList(Data);
-        List<string> result = new List<string>();
-        MoveDirection _dir = MoveDirection.Right;
+        Data = RotateList(Data);
         switch (orientation)
         {
             case MoveOrientation.North:
             case MoveOrientation.East:
-                _dir = MoveDirection.Right;
-                result = moveItems(pivot, _dir);
-                if (moves == 1 && orientation==MoveOrientation.North) Console.WriteLine($"S1:_{orientation}_{AocStep1(Data)}");
-
+                Data = moveItems(Data, MoveDirection.Right);
                 break;
             case MoveOrientation.South:
             case MoveOrientation.West:
-                _dir = MoveDirection.Left;
-                result = moveItems(pivot, _dir);
+                Data = moveItems(Data, MoveDirection.Left);
                 break;
-        }
-        Data = new List<string>(result);
-        if (moves <= 3)
-        {
-            File.WriteAllLines($"..\\..\\..\\00_traceR{moves}_{orientation}.txt", Data);
         }
     }
 
-
+    if (CalcPoints(Data) == 64)
+    {
+        Console.WriteLine("");
+    }
     string _dataStr = string.Join("", Data.ToArray());
     if (DataKeys.ContainsKey(_dataStr))
     {
@@ -60,7 +73,7 @@ for (int moves = 1; moves <= 1000000000; moves++)
     }
     else
     {
-        DataKeys.Add( _dataStr, moves);
+        DataKeys.Add(_dataStr, moves);
     }
 }
 Console.WriteLine($"S2:{CalcPoints(Data)}");
@@ -99,7 +112,6 @@ List<string> RotateList(List<string> list)
         StringBuilder _sb = new StringBuilder();
         for (int ri = 0; ri < list.Count(); ri++)
         {
-            // Console.WriteLine($"r:{ri};c:{c}");
             _sb.Append(list[ri][c]);
         }
         col2row.Add(_sb.ToString());
