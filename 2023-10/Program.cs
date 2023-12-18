@@ -81,7 +81,6 @@ StartOfBorder = _longest.Value.Path[_longest.Value.Path.Count - 1];
 char _startSymbol = _winMap[StartOfBorder.Row, StartOfBorder.Col];
 // Start in the middle row, find first border symbol, Then follow border clockwise
 sideOfBorder = mazeOuterBoundary.East;
-_nextMove = gtDirection.South;
 Point _prevPoint = _longest.Value.Path[0];
 
 gtDirection _Moved = gtDirection.None;
