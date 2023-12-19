@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _2023_14
 {
-    enum MoveOrientation { North, West, South, East }
+    enum MoveOrientation { North, West, South,  East }
     enum MoveDirection { Left, Right }
     class Move
     {
