@@ -41,29 +41,29 @@ long AocStep2(List<string> data)
                     break;
             }
 
-        string _dataStr = string.Join("", Data.ToArray());
+            string _dataStr = string.Join("", Data.ToArray());
 
-        if (interval == -1)
-        {
-            if (DataKeys.ContainsKey(_dataStr))
+            if (interval == -1)
             {
-                int first = DataKeys[_dataStr];
-                interval = moves - first;
-                Console.WriteLine($"f:{first}, c:{moves}, interval:{moves - first}");
+                if (DataKeys.ContainsKey(_dataStr))
+                {
+                    int first = DataKeys[_dataStr];
+                    interval = moves - first;
+                    Console.WriteLine($"f:{first}, c:{moves}, interval:{moves - first}");
 
-                moves = (((1000000000 - first) / interval) * interval) + first;
-            }
-            else
-            {
-                DataKeys.Add(_dataStr, moves);
+                    moves = (((1000000000 - first) / interval) * interval) + first;
+                }
+                else
+                {
+                    DataKeys.Add(_dataStr, moves);
+                }
             }
         }
-    }
 
-    // 95254
+        // 95254
+    }
     return CalcPoints(Data);
 }
-
 
 long AocStep1(List<string> data)
 {
@@ -113,7 +113,7 @@ int CalcPoints(List<string> data)
 {
     int points = 0;
     int value = Data.Count();
-    for (Int32 r = 0; r < data.Count ; r++)
+    for (Int32 r = 0; r < data.Count; r++)
     {
         for (int i = 0; i < data[r].Length; i++)
         {
@@ -124,3 +124,4 @@ int CalcPoints(List<string> data)
 
     return points;
 }
+
