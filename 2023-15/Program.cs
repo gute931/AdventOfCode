@@ -22,24 +22,45 @@ foreach (string codedLetter in codedLetters)
     {
         case true: // Add
             List<GtHashCode> list = Boxes[hc.Box];
-            if (list.Find(w => w.Code == hc.Code) == null )
+            if (list.Find(w => w.Code == hc.Code) == null)
             {
                 list.Add(hc);
             }
             else
             {
-                GtHashCode _hit = list.Where(w => w.Code == hc.Code).FirstOrDefault();
+                GtHashCode _hit = list.Where(w => w.Code == hc.Code).First();
                 _hit.Replace(hc);
             }
             break;
         default: // Delete
+            foreach (var item in Boxes)
+            {
+                if (item.Value.Where(w=>w.Code == hc.Code).Count() > 0)
+                {
+                    item.Value.RemoveAll(w => w.Code == hc.Code);
+                }
+
+            }
             break;
     }
 }
+int S2 = 0;
+int _box = 0;
+foreach (var items in Boxes)
+{
+    _box++;
+    int _pos = 0; 
+    foreach (var item in items.Value)
+    {
+        _pos++;
+        S2 += _box * _pos * item.Index;
+    }
+}
 
-Console.WriteLine();
+// 698295 TH
+Console.WriteLine($"S2:{S2}");
 
-
+Console.WriteLine("");
 
 
 int hash(string l)

@@ -13,10 +13,10 @@ namespace _2023_15
         public GtHashCode(string code)
         {
             FullCode = code;
-            Box = hash(code);
             Add = code.Contains("=");
             string[] _parts = code.Split("=-".ToCharArray());
             Code = _parts[0];
+            Box = hash(Code);
             if (Add) Index = Convert.ToInt32(_parts[1]);
         }
 
