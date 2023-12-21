@@ -1,21 +1,23 @@
 ﻿using _2023_16;
+using System.Data;
 using System.Text;
 
 Console.WriteLine("2023-16");
 
-string[] Data = File.ReadAllLines("data.txt");
+string[] Data = File.ReadAllLines("testdata.txt");
 char[,] Map = new char[Data[0].Length, Data.Length];
 string[,] MapN = new string[Data[0].Length, Data.Length];
 StringBuilder _path = new StringBuilder();
-
+int ROWS = Data.Length;
+int COLS = Data[0].Length;
 char[] NavSymbols = { '|', '-', '/', '\\' };
-List<(int,int)> startPositions = new List<(int,int)> ();
+List<(int, int, char)> startPositions = new List<(int, int, char)>();
 int counter = 0;
-for (int r = 0; r < Data.Length; r++)
+for (int r = 0; r < ROWS; r++)
 {
-    for (int c = 0; c < Data[r].Length; c++)
+    for (int c = 0; c < COLS; c++)
     {
-        if ((r == 0 || r == Data.Length - 1 || c==0 || c == Data[0].Length) && ) continue;
+        if ((r == 0 || r == ROWS - 1 || c == 0 || c == COLS - 1) && NavSymbols.Contains(Data[r][c])) startPositions.Add((r, c, Data[r][c]));
         Map[r, c] = Data[r][c];
         MapN[r, c] = ".";
     }
@@ -23,15 +25,95 @@ for (int r = 0; r < Data.Length; r++)
 
 List<(int, int, GtDirection)> History = new List<(int, int, GtDirection)>();
 
-try
+gtScanner(0, 0, GtDirection.East);
+
+
+foreach (var item in startPositions)
 {
-    gtScanner(0, 0, GtDirection.East);
+    int steps = 0;
+    GtDirection _dir = GtDirection.North;
+    Array.Clear(MapN, 0, MapN.Length);
+    if (item.Item1 == 0) // Top row
+    {
+        switch (item.Item3)
+        {
+            case '|':
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.South);
+                break;
+            case '-':
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.East);
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.West);
+                break;
+            case '/':
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.East);
+                break;
+            case '\\':
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.West);
+                break;
+        }
+    }
+    else if (item.Item1 == ROWS - 1)
+    {
+        switch (item.Item3)
+        {
+            case '|':
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.North);
+                break;
+            case '-':
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.East);
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.West);
+                break;
+            case '/':
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.West);
+                break;
+            case '\\':
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.East);
+                break;
+        }
+    }
+    else if (item.Item2 == 0)
+    {
+        switch (item.Item3)
+        {
+            case '|':
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.North);
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.South);
+                break;
+            case '-':
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.East);
+                break;
+            case '/':
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.North);
+                break;
+            case '\\':
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.South);
+                break;
+        }
+    }
+    else if (item.Item2 == COLS - 1)
+    {
+        switch (item.Item3)
+        {
+            case '|':
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.North);
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.South);
+                break;
+            case '-':
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.West);
+                break;
+            case '/':
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.South);
+                break;
+            case '\\':
+                steps += gtScanner(item.Item1, item.Item2, GtDirection.North);
+                break;
+        }
+    }
+    Console.WriteLine($"s2:{steps}");
 }
-catch (Exception e)
-{
-    Console.WriteLine(e.Message);
-}
-File.WriteAllText(@"..\..\..\00_Path.txt", _path.ToString());
+// 625 TL
+Console.WriteLine(""  );
+// File.WriteAllText(@"..\..\..\00_Path.txt", _path.ToString());
 
 void WriteMap()
 {
