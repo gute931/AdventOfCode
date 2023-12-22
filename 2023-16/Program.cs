@@ -4,7 +4,7 @@ using System.Text;
 
 Console.WriteLine("2023-16");
 
-string[] Data = File.ReadAllLines("testdata.txt");
+string[] Data = File.ReadAllLines("data.txt");
 char[,] Map = new char[Data[0].Length, Data.Length];
 string[,] MapN = new string[Data[0].Length, Data.Length];
 StringBuilder _path = new StringBuilder();
@@ -30,6 +30,7 @@ gtScanner(0, 0, GtDirection.East);
 
 foreach (var item in startPositions)
 {
+    History = new List<(int, int, GtDirection)>();
     int steps = 0;
     GtDirection _dir = GtDirection.North;
     Array.Clear(MapN, 0, MapN.Length);
